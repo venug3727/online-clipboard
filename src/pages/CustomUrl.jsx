@@ -69,19 +69,33 @@ export default function CustomUrl() {
   };
 
   useEffect(() => {
-    // Handle redirection if someone visits a short URL directly
-    const path = window.location.pathname;
-    if (path.length > 1 && !path.startsWith("/custom-url")) {
-      const shortPath = path.substring(1); // Remove leading slash
-      fetch(`${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`)
-        .then((response) => {
-          if (response.redirected) {
-            window.location.href = response.url;
-          }
-        })
-        .catch(console.error);
+  const path = window.location.pathname;
+  if (path.length > 1 && !path.startsWith("/custom-url")) {
+    const shortPath = path.substring(1);
+    
+    // First check if we're on the root path (not in the custom-url page)
+    if (!window.location.pathname.startsWith('/custom-url')) {
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`, {
+        redirect: 'manual' // Important: handle redirect manually
+      })
+      .then(response => {
+        if (response.type === 'opaqueredirect') {
+          // For CORS reasons, we can't see the redirected URL
+          // So we need to reconstruct it from our known URL structure
+          window.location.href = `${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`;
+        } else if (response.ok) {
+          return response.json();
+        } else {
+          // If not found, stay on the page
+          console.error('Short URL not found');
+        }
+      })
+      .catch(error => {
+        console.error('Redirect error:', error);
+      });
     }
-  }, []);
+  }
+}, []);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shortUrl);
@@ -123,7 +137,7 @@ export default function CustomUrl() {
               type="url"
               value={originalUrl}
               onChange={(e) => setOriginalUrl(e.target.value)}
-              placeholder="https://chat.deepseek.com/a/chat/s/aeef066d-ae0e-42eb-b686-5bddc7657767"
+              placeholder="https://example.com/"
               className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               required
             />
@@ -138,7 +152,7 @@ export default function CustomUrl() {
             </label>
             <div className="flex">
               <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
-                www.clipvault/
+                www.bmsclipboard.netlify.app/
               </span>
               <input
                 id="custom-path"
@@ -147,7 +161,7 @@ export default function CustomUrl() {
                 onChange={(e) =>
                   setCustomPath(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))
                 }
-                placeholder="deepseek"
+                placeholder="ex"
                 className="flex-1 px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-r-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 pattern="[a-zA-Z0-9]+"
                 title="Only letters and numbers allowed"

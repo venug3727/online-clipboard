@@ -56,19 +56,19 @@ export default function Layout({ children }) {
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="relative">
-              <div className="absolute inset-0 bg-indigo-400 rounded-lg blur" />
-              <Clipboard className="h-8 w-8 text-indigo-600 dark:text-indigo-400 relative z-10" />
+              <div className="absolute md:ml-[0px] ml-[80px] inset-0 bg-indigo-400 rounded-lg blur" />
+              <Clipboard className="h-8 md:ml-[0px] ml-[80px] w-8 text-indigo-600 dark:text-indigo-400 relative z-10" />
             </div>
             <Link to="/">
-              <span className="text-xl font-bold">ClipVault</span>
+              <span className="text-xl  font-bold">ClipVault</span>
             </Link>
           </div>
-          <button
+          {/* <button
             className="md:hidden p-1"
             onClick={() => setMobileMenuOpen(false)}
           >
             <X className="h-5 w-5" />
-          </button>
+          </button> */}
         </div>
 
         <nav className="space-y-1">
@@ -79,7 +79,7 @@ export default function Layout({ children }) {
           {[
             { to: "/send", icon: Send, label: "Send Clipboard" },
             { to: "/receive", icon: Download, label: "Receive Clipboard" },
-            { to: "/history", icon: History, label: "History" },
+            
           ].map(({ to, icon: Icon, label }) => (
             <Link
               key={to}
@@ -101,7 +101,7 @@ export default function Layout({ children }) {
           </h3>
 
           {[
-            { to: "/snippets", icon: Bookmark, label: "Snippets" },
+            
             { to: "/custom-url", icon: LinkIcon, label: "Custom URLs" },
             { to: "/file-sharing", icon: FileText, label: "File Sharing" },
             { to: "/qr-generator", icon: QrCode, label: "QR Generator" },
@@ -154,7 +154,7 @@ export default function Layout({ children }) {
       </div>
 
       {/* Main Content with Topbar */}
-      <div className="md:ml-64 mt-[-500px] min-h-screen">
+      <div className="md:ml-64 md:mt-[-400px] min-h-screen">
         <div className="fixed top-0 right-0 left-0 md:left-64 z-30">
           <nav className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

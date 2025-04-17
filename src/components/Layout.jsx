@@ -191,30 +191,7 @@ export default function Layout({ children }) {
         <main className="pt-14 pb-16 px-4 sm:px-5 lg:px-6">{children}</main>
 
         {/* Mobile Bottom Navigation */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t dark:border-gray-700 z-40">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex justify-around py-2">
-              {[
-                { to: "/", icon: Clipboard, label: "Home" },
-                { to: "/history", icon: History, label: "History" },
-                { to: "/snippets", icon: Bookmark, label: "Snippets" },
-              ].map(({ to, icon: Icon, label }) => (
-                <Link
-                  key={to}
-                  to={to}
-                  className={`flex flex-col items-center transform hover:scale-105 transition-transform duration-200 ${
-                    isActive(to)
-                      ? "text-indigo-600 dark:text-indigo-400"
-                      : "text-gray-600 dark:text-gray-400"
-                  }`}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span className="text-xs mt-0.5">{label}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </nav>
+        
       </div>
     </div>
   );

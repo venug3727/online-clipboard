@@ -199,9 +199,55 @@ export default function FileSharing() {
   return (
     <>
       <Helmet>
-        <title>File Sharing</title>
+        {/* Primary Meta Tags */}
+        <title>BMSClipboard | Secure File Sharing for BMSCE/BMSIT</title>
+        <meta name="application-name" content="BMSClipboard" />
+        <meta name="apple-mobile-web-app-title" content="BMSClipboard" />
+        <meta
+          name="description"
+          content="Securely share files with BMSCE and BMSIT students using BMSClipboard's encrypted file sharing platform."
+        />
+        <meta
+          name="keywords"
+          content="BMSClipboard, BMSCE, BMSIT, file sharing, secure file transfer, BMS College of Engineering, BMS Institute of Technology, encrypted file sharing, temporary file storage"
+        />
+        <meta name="author" content="BMS Development Team" />
+        <meta name="robots" content="index, follow" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="rating" content="general" />
+        
+        {/* Google / Search Engine Tags */}
+        <meta itemProp="name" content="BMSClipboard File Sharing" />
+        <meta itemProp="description" content="Secure file sharing platform for BMSCE/BMSIT students and faculty" />
+        <meta itemProp="image" content="https://bmsclipboard.example.com/file-sharing-preview.png" />
+        
+        {/* Facebook Meta Tags */}
+        <meta property="og:url" content="https://bmsclipboard.example.com/file-sharing" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="BMSClipboard File Sharing" />
+        <meta property="og:description" content="Secure file sharing for BMSCE/BMSIT community" />
+        <meta property="og:image" content="https://bmsclipboard.example.com/file-sharing-preview.png" />
+        <meta property="og:site_name" content="BMSClipboard" />
+        <meta property="og:locale" content="en_US" />
+        
+        {/* Twitter Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="BMSClipboard File Sharing" />
+        <meta name="twitter:description" content="Secure file sharing for BMSCE/BMSIT community" />
+        <meta name="twitter:image" content="https://bmsclipboard.example.com/file-sharing-preview.png" />
+        <meta name="twitter:site" content="@BMSClipboard" />
+        <meta name="twitter:creator" content="@BMSClipboard" />
+        
+        {/* Institution Specific Tags */}
+        <meta name="institution" content="BMSCE, BMSIT" />
+        <meta name="campus" content="Bangalore" />
+        <meta name="organization" content="BMS Educational Trust" />
+        
+        {/* Google Ads Script */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
       </Helmet>
 
+      {/* ALL EXISTING CONTENT REMAINS EXACTLY THE SAME BELOW THIS LINE */}
       <div className="max-w-3xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           File Sharing

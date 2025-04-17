@@ -5,8 +5,8 @@ import { Helmet } from "react-helmet";
 
 export default function QRGenerator() {
   const [inputText, setInputText] = useState("");
-  const [qrValue, setQrValue] = useState("https://clipvault.app");
-  const [darkMode, setDarkMode] = useState(false); // Added darkMode state
+  const [qrValue, setQrValue] = useState("https://bmsclipboard.example.com");
+  const [darkMode, setDarkMode] = useState(false);
   const qrRef = useRef(null);
 
   const generateQR = (e) => {
@@ -30,7 +30,7 @@ export default function QRGenerator() {
         ctx.drawImage(img, 0, 0);
         const pngFile = canvas.toDataURL("image/png");
         const downloadLink = document.createElement("a");
-        downloadLink.download = "clipvault-qr.png";
+        downloadLink.download = "bmsclipboard-qr.png";
         downloadLink.href = `${pngFile}`;
         downloadLink.click();
       };
@@ -46,9 +46,55 @@ export default function QRGenerator() {
   return (
     <>
       <Helmet>
-        <title>ClipVault - QR Code Generator</title>
+        {/* Primary Meta Tags */}
+        <title>BMSClipboard | QR Code Generator for BMSCE/BMSIT</title>
+        <meta name="application-name" content="BMSClipboard" />
+        <meta name="apple-mobile-web-app-title" content="BMSClipboard" />
+        <meta
+          name="description"
+          content="Generate QR codes instantly for BMSCE and BMSIT students with BMSClipboard's secure QR code generator."
+        />
+        <meta
+          name="keywords"
+          content="BMSClipboard, BMSCE, BMSIT, QR code generator, BMS College of Engineering, BMS Institute of Technology, secure QR codes, quick sharing"
+        />
+        <meta name="author" content="BMS Development Team" />
+        <meta name="robots" content="index, follow" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="rating" content="general" />
+        
+        {/* Google / Search Engine Tags */}
+        <meta itemProp="name" content="BMSClipboard QR Generator" />
+        <meta itemProp="description" content="Secure QR code generator for BMSCE/BMSIT students and faculty" />
+        <meta itemProp="image" content="https://bmsclipboard.example.com/qr-generator-preview.png" />
+        
+        {/* Facebook Meta Tags */}
+        <meta property="og:url" content="https://bmsclipboard.example.com/qr-generator" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="BMSClipboard QR Generator" />
+        <meta property="og:description" content="Generate QR codes for BMSCE/BMSIT community" />
+        <meta property="og:image" content="https://bmsclipboard.example.com/qr-generator-preview.png" />
+        <meta property="og:site_name" content="BMSClipboard" />
+        <meta property="og:locale" content="en_US" />
+        
+        {/* Twitter Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="BMSClipboard QR Generator" />
+        <meta name="twitter:description" content="Generate QR codes for BMSCE/BMSIT community" />
+        <meta name="twitter:image" content="https://bmsclipboard.example.com/qr-generator-preview.png" />
+        <meta name="twitter:site" content="@BMSClipboard" />
+        <meta name="twitter:creator" content="@BMSClipboard" />
+        
+        {/* Institution Specific Tags */}
+        <meta name="institution" content="BMSCE, BMSIT" />
+        <meta name="campus" content="Bangalore" />
+        <meta name="organization" content="BMS Educational Trust" />
+        
+        {/* Google Ads Script */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
       </Helmet>
 
+      {/* ALL EXISTING CONTENT REMAINS EXACTLY THE SAME BELOW THIS LINE */}
       <div className="max-w-3xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           QR Code Generator

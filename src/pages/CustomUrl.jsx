@@ -69,33 +69,33 @@ export default function CustomUrl() {
   };
 
   useEffect(() => {
-  const path = window.location.pathname;
-  
-  // Skip if on homepage or custom-url page
-  if (path === '/' || path.startsWith('/custom-url')) return;
+    const path = window.location.pathname;
+    
+    // Skip if on homepage or custom-url page
+    if (path === '/' || path.startsWith('/custom-url')) return;
 
-  const shortPath = path.substring(1); // Remove leading "/"
-  
-  // Call your backend API
-  fetch(`${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`, {
-    redirect: 'manual' // Important for handling redirects
-  })
-  .then(response => {
-    if (response.type === 'opaqueredirect') {
-      // For CORS reasons, reconstruct the redirect URL
-      window.location.href = `${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`;
-    } else if (response.ok) {
-      return response.json().then(data => {
-        window.location.href = data.original_url;
-      });
-    } else {
-      console.error('Short URL not found');
-    }
-  })
-  .catch(error => {
-    console.error('Redirect failed:', error);
-  });
-}, []);
+    const shortPath = path.substring(1); // Remove leading "/"
+    
+    // Call your backend API
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`, {
+      redirect: 'manual' // Important for handling redirects
+    })
+    .then(response => {
+      if (response.type === 'opaqueredirect') {
+        // For CORS reasons, reconstruct the redirect URL
+        window.location.href = `${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`;
+      } else if (response.ok) {
+        return response.json().then(data => {
+          window.location.href = data.original_url;
+        });
+      } else {
+        console.error('Short URL not found');
+      }
+    })
+    .catch(error => {
+      console.error('Redirect failed:', error);
+    });
+  }, []);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shortUrl);
@@ -105,15 +105,57 @@ export default function CustomUrl() {
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
-      {/* SEO Meta Tags */}
+      {/* Enhanced SEO Meta Tags */}
       <Helmet>
-        <title>ClipVault - Create Custom Short URLs</title>
+        {/* Primary Meta Tags */}
+        <title>BMSClipboard - Create Custom Short URLs for BMSCE/BMSIT</title>
+        <meta name="application-name" content="BMSClipboard" />
+        <meta name="apple-mobile-web-app-title" content="BMSClipboard" />
         <meta
           name="description"
-          content="Generate custom short URLs for your links with ClipVault's URL shortener."
+          content="Generate custom short URLs for BMSCE and BMSIT students with BMSClipboard's secure URL shortener."
         />
+        <meta
+          name="keywords"
+          content="BMSClipboard, BMSCE, BMSIT, URL shortener, custom links, BMS College of Engineering, BMS Institute of Technology, secure links, QR code generator"
+        />
+        <meta name="author" content="BMS Development Team" />
+        <meta name="robots" content="index, follow" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="rating" content="general" />
+        
+        {/* Google / Search Engine Tags */}
+        <meta itemProp="name" content="BMSClipboard URL Shortener" />
+        <meta itemProp="description" content="Secure URL shortener for BMSCE/BMSIT students and faculty" />
+        <meta itemProp="image" content="https://bmsclipboard.example.com/logo.png" />
+        
+        {/* Facebook Meta Tags */}
+        <meta property="og:url" content="https://bmsclipboard.example.com/custom-url" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="BMSClipboard URL Shortener" />
+        <meta property="og:description" content="Create custom short URLs for BMSCE/BMSIT community" />
+        <meta property="og:image" content="https://bmsclipboard.example.com/url-shortener-preview.png" />
+        <meta property="og:site_name" content="BMSClipboard" />
+        <meta property="og:locale" content="en_US" />
+        
+        {/* Twitter Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="BMSClipboard URL Shortener" />
+        <meta name="twitter:description" content="Create custom short URLs for BMSCE/BMSIT community" />
+        <meta name="twitter:image" content="https://bmsclipboard.example.com/url-shortener-preview.png" />
+        <meta name="twitter:site" content="@BMSClipboard" />
+        <meta name="twitter:creator" content="@BMSClipboard" />
+        
+        {/* Institution Specific Tags */}
+        <meta name="institution" content="BMSCE, BMSIT" />
+        <meta name="campus" content="Bangalore" />
+        <meta name="organization" content="BMS Educational Trust" />
+        
+        {/* Google Ads Script */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
       </Helmet>
 
+      {/* ALL EXISTING CONTENT REMAINS EXACTLY THE SAME BELOW THIS LINE */}
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Custom URL Shortener
@@ -276,7 +318,7 @@ export default function CustomUrl() {
 
       <div className="mt-10 text-center text-sm text-gray-500 dark:text-gray-400">
         <p>All links are valid for 1 year</p>
-        <p className="mt-1">© {new Date().getFullYear()} ClipVault</p>
+        <p className="mt-1">© {new Date().getFullYear()} BMSClipboard</p>
       </div>
     </div>
   );

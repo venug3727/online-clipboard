@@ -23,26 +23,55 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>ClipVault | Secure Cross-Device Clipboard Sharing</title>
+        {/* Primary Meta Tags */}
+        <title>BMSClipboard | Secure Cross-Device Clipboard Sharing</title>
+        <meta name="application-name" content="BMSClipboard" />
+        <meta name="apple-mobile-web-app-title" content="BMSClipboard" />
         <meta
           name="description"
-          content="Securely share text, links, and files between devices with end-to-end encryption. No registration required. Generate codes or custom URLs for instant sharing."
+          content="BMSCE/BMSIT's official clipboard sharing. Securely share text, links, and files between devices with end-to-end encryption."
         />
         <meta
           name="keywords"
-          content="clipboard sharing, secure file transfer, cross-device sync, end-to-end encryption, temporary file sharing"
+          content="BMSClipboard, BMSCE, BMSIT, BMS College of Engineering, BMS Institute of Technology, Bull Temple Road, Basavanagudi, Bangalore campus, clipboard sharing, secure file transfer, cross-device sync, end-to-end encryption"
         />
-        <meta
-          property="og:title"
-          content="ClipVault - Secure Clipboard Sharing"
-        />
-        <meta
-          property="og:description"
-          content="Instant, secure sharing of text and files between devices with auto-expiring links and E2E encryption."
-        />
+        <meta name="author" content="BMS Development Team" />
+        <meta name="robots" content="index, follow" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="rating" content="general" />
+        
+        {/* Google / Search Engine Tags */}
+        <meta itemProp="name" content="BMSClipboard" />
+        <meta itemProp="description" content="Secure clipboard sharing for BMSCE/BMSIT students and faculty" />
+        <meta itemProp="image" content="https://bmsclipboard.example.com/logo.png" />
+        
+        {/* Facebook Meta Tags */}
+        <meta property="og:url" content="https://bmsclipboard.example.com" />
         <meta property="og:type" content="website" />
+        <meta property="og:title" content="BMSClipboard" />
+        <meta property="og:description" content="Secure clipboard sharing for BMSCE/BMSIT community" />
+        <meta property="og:image" content="https://bmsclipboard.example.com/logo.png" />
+        <meta property="og:site_name" content="BMSClipboard" />
+        <meta property="og:locale" content="en_US" />
+        
+        {/* Twitter Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="BMSClipboard" />
+        <meta name="twitter:description" content="Secure clipboard sharing for BMSCE/BMSIT community" />
+        <meta name="twitter:image" content="https://bmsclipboard.example.com/logo.png" />
+        <meta name="twitter:site" content="@BMSClipboard" />
+        <meta name="twitter:creator" content="@BMSClipboard" />
+        
+        {/* Institution Specific Tags */}
+        <meta name="institution" content="BMSCE, BMSIT" />
+        <meta name="campus" content="Bangalore" />
+        <meta name="organization" content="BMS Educational Trust" />
+        
+        {/* Google Ads Script */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
       </Helmet>
 
+      {/* ALL EXISTING CONTENT REMAINS EXACTLY THE SAME BELOW THIS LINE */}
       <div className="flex min-h-screen">
         {/* Mobile Menu Button */}
 

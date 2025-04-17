@@ -70,31 +70,31 @@ export default function CustomUrl() {
 
   useEffect(() => {
   const path = window.location.pathname;
-  if (path.length > 1 && !path.startsWith("/custom-url")) {
-    const shortPath = path.substring(1);
-    
-    // First check if we're on the root path (not in the custom-url page)
-    if (!window.location.pathname.startsWith('/custom-url')) {
-      fetch(`${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`, {
-        redirect: 'manual' // Important: handle redirect manually
-      })
-      .then(response => {
-        if (response.type === 'opaqueredirect') {
-          // For CORS reasons, we can't see the redirected URL
-          // So we need to reconstruct it from our known URL structure
-          window.location.href = `${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`;
-        } else if (response.ok) {
-          return response.json();
-        } else {
-          // If not found, stay on the page
-          console.error('Short URL not found');
-        }
-      })
-      .catch(error => {
-        console.error('Redirect error:', error);
+  
+  // Skip if on homepage or custom-url page
+  if (path === '/' || path.startsWith('/custom-url')) return;
+
+  const shortPath = path.substring(1); // Remove leading "/"
+  
+  // Call your backend API
+  fetch(`${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`, {
+    redirect: 'manual' // Important for handling redirects
+  })
+  .then(response => {
+    if (response.type === 'opaqueredirect') {
+      // For CORS reasons, reconstruct the redirect URL
+      window.location.href = `${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`;
+    } else if (response.ok) {
+      return response.json().then(data => {
+        window.location.href = data.original_url;
       });
+    } else {
+      console.error('Short URL not found');
     }
-  }
+  })
+  .catch(error => {
+    console.error('Redirect failed:', error);
+  });
 }, []);
 
   const copyToClipboard = () => {

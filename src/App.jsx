@@ -7,8 +7,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Send from "./pages/Send";
 import Receive from "./pages/Receive";
-import History from "./pages/History";
-import Snippets from "./pages/Snippets";
+
 import Settings from "./pages/Settings";
 import CustomUrl from "./pages/CustomUrl";
 import FileSharing from "./pages/FileSharing";
@@ -44,22 +43,8 @@ function App() {
               </Layout>
             }
           />
-          <Route
-            path="/history"
-            element={
-              <Layout>
-                <History />
-              </Layout>
-            }
-          />
-          <Route
-            path="/snippets"
-            element={
-              <Layout>
-                <Snippets />
-              </Layout>
-            }
-          />
+
+          
           <Route
             path="/settings"
             element={

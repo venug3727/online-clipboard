@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Lock, Copy, CheckCircle } from "lucide-react";
 import { Helmet } from "react-helmet";
 
@@ -9,6 +9,19 @@ export default function Receive() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [adLoaded, setAdLoaded] = useState(false);
+
+  // Load ads when content is retrieved
+  useEffect(() => {
+    if (content && !adLoaded) {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        setAdLoaded(true);
+      } catch (err) {
+        console.error("AdSense error:", err);
+      }
+    }
+  }, [content, adLoaded]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -76,14 +89,14 @@ export default function Receive() {
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard Receiver" />
         <meta itemProp="description" content="Secure clipboard receiver for BMSCE/BMSIT students and faculty" />
-        <meta itemProp="image" content="https://bmsclipboard.example.com/receive-preview.png" />
+        <meta itemProp="image" content="https://bmsclipboard.netlify.app/receive-preview.png" />
         
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.example.com/receive" />
+        <meta property="og:url" content="https://bmsclipboard.netlify.app/receive" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard Receiver" />
         <meta property="og:description" content="Securely receive clipboard content for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.example.com/receive-preview.png" />
+        <meta property="og:image" content="https://bmsclipboard.netlify.app/receive-preview.png" />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
         
@@ -91,7 +104,7 @@ export default function Receive() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard Receiver" />
         <meta name="twitter:description" content="Securely receive clipboard content for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.example.com/receive-preview.png" />
+        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/receive-preview.png" />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
         
@@ -100,14 +113,32 @@ export default function Receive() {
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
         
-        {/* Google Ads Script */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
+        {/* Google Ads Script - Only loads when content is retrieved */}
+        {content && (
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossOrigin="anonymous"></script>
+        )}
       </Helmet>
 
-      <div className="max-w-2xl mx-auto py-8">
+      <div className="max-w-2xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
           Receive Clipboard
         </h1>
+
+        {/* Content for empty state to ensure AdSense compliance */}
+        {!content && (
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              How to receive content
+            </h2>
+            <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+              <li>Enter the 4-digit code provided by the sender</li>
+              <li>If the content is encrypted, enter the decryption key</li>
+              <li>Click "Retrieve Clipboard" to access the shared content</li>
+              <li>All content is automatically deleted after being viewed</li>
+              <li>For BMSCE/BMSIT students and faculty only</li>
+            </ul>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
@@ -163,6 +194,20 @@ export default function Receive() {
         {error && (
           <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400">
             {error}
+          </div>
+        )}
+
+        {/* AdSense Ad Unit - Only shows when content is retrieved */}
+        {content && (
+          <div className="my-8">
+            <p className="text-xs text-gray-500 text-center mb-1">Advertisement</p>
+            <ins className="adsbygoogle"
+              style={{ display: 'block' }}
+              data-ad-client="ca-pub-9460974170228372"
+              data-ad-slot="1101018584" // Replace with your actual ad slot ID
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
           </div>
         )}
 

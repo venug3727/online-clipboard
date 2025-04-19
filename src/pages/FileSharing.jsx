@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Upload, File, Download, Copy, Trash2, Eye } from "lucide-react";
 import { Helmet } from "react-helmet";
 
@@ -11,6 +11,19 @@ export default function FileSharing() {
   const [codeInput, setCodeInput] = useState("");
   const [receivedFile, setReceivedFile] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
+  const [adLoaded, setAdLoaded] = useState(false);
+
+  // Load ads when component mounts and when content is available
+  useEffect(() => {
+    if ((files.length > 0 || shareLinks.length > 0 || receivedFile) && !adLoaded) {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        setAdLoaded(true);
+      } catch (err) {
+        console.error("AdSense error:", err);
+      }
+    }
+  }, [files, shareLinks, receivedFile, adLoaded]);
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -219,14 +232,14 @@ export default function FileSharing() {
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard File Sharing" />
         <meta itemProp="description" content="Secure file sharing platform for BMSCE/BMSIT students and faculty" />
-        <meta itemProp="image" content="https://bmsclipboard.example.com/file-sharing-preview.png" />
+        <meta itemProp="image" content="https://bmsclipboard.netlify.app/file-sharing-preview.png" />
         
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.example.com/file-sharing" />
+        <meta property="og:url" content="https://bmsclipboard.netlify.app/file-sharing" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard File Sharing" />
         <meta property="og:description" content="Secure file sharing for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.example.com/file-sharing-preview.png" />
+        <meta property="og:image" content="https://bmsclipboard.netlify.app/file-sharing-preview.png" />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
         
@@ -234,7 +247,7 @@ export default function FileSharing() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard File Sharing" />
         <meta name="twitter:description" content="Secure file sharing for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.example.com/file-sharing-preview.png" />
+        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/file-sharing-preview.png" />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
         
@@ -243,15 +256,37 @@ export default function FileSharing() {
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
         
-        {/* Google Ads Script */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
+        {/* Google Ads Script - Only loads when there's content */}
+        {(files.length > 0 || shareLinks.length > 0 || receivedFile) && (
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossOrigin="anonymous"></script>
+        )}
       </Helmet>
 
-      {/* ALL EXISTING CONTENT REMAINS EXACTLY THE SAME BELOW THIS LINE */}
       <div className="max-w-3xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           File Sharing
         </h1>
+
+        {/* Content for empty state to ensure AdSense compliance */}
+        {!files.length && !shareLinks.length && !receivedFile && (
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              About BMSClipboard File Sharing
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300 mb-4">
+              Securely share files with BMSCE and BMSIT students and faculty. 
+              Our platform provides encrypted temporary file storage with unique access codes.
+            </p>
+            <h3 className="font-medium text-gray-900 dark:text-white mb-2">Features:</h3>
+            <ul className="list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-1">
+              <li>End-to-end encrypted file transfers</li>
+              <li>Auto-expiring links (7 days)</li>
+              <li>4-digit access codes for easy sharing</li>
+              <li>Preview images, PDFs, and text files</li>
+              <li>Built specifically for BMSCE/BMSIT community</li>
+            </ul>
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400">
@@ -339,6 +374,20 @@ export default function FileSharing() {
             </button>
           </div>
         </div>
+
+        {/* AdSense Ad Unit - Only shows when there's content */}
+        {(files.length > 0 || shareLinks.length > 0 || receivedFile) && (
+          <div className="my-8">
+            <p className="text-xs text-gray-500 text-center mb-1">Advertisement</p>
+            <ins className="adsbygoogle"
+              style={{ display: 'block' }}
+              data-ad-client="ca-pub-9460974170228372"
+              data-ad-slot="1101018584" // Replace with your actual ad slot ID
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
+          </div>
+        )}
 
         {renderFilePreview()}
 

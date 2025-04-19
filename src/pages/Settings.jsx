@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Moon, Clock, CreditCard } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { Helmet } from "react-helmet";
@@ -7,6 +7,16 @@ export default function Settings() {
   const { darkMode, toggleDarkMode } = useTheme();
   const [autoClearMinutes, setAutoClearMinutes] = useState(15);
   const [isProUser, setIsProUser] = useState(false);
+
+  // Initialize AdSense ads after component mounts
+  useEffect(() => {
+    try {
+      // This is how we trigger AdSense to look for ad slots
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (error) {
+      console.error("AdSense error:", error);
+    }
+  }, []);
 
   return (
     <>
@@ -31,14 +41,14 @@ export default function Settings() {
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard Settings" />
         <meta itemProp="description" content="Customize your clipboard experience for BMSCE/BMSIT students" />
-        <meta itemProp="image" content="https://bmsclipboard.example.com/settings-preview.png" />
+        <meta itemProp="image" content="https://bmsclipboard.netlify.app/settings-preview.png" />
         
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.example.com/settings" />
+        <meta property="og:url" content="https://bmsclipboard.netlify.app/settings" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard Settings" />
         <meta property="og:description" content="Customize your clipboard settings for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.example.com/settings-preview.png" />
+        <meta property="og:image" content="https://bmsclipboard.netlify.app/settings-preview.png" />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
         
@@ -46,7 +56,7 @@ export default function Settings() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard Settings" />
         <meta name="twitter:description" content="Customize your clipboard settings for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.example.com/settings-preview.png" />
+        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/settings-preview.png" />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
         
@@ -114,37 +124,16 @@ export default function Settings() {
             </div>
           </div>
 
+          {/* AdSense Ad Unit */}
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-            <div className="flex items-start space-x-3">
-              <CreditCard className="h-5 w-5 text-gray-600 dark:text-gray-400 mt-1" />
-              <div className="flex-grow">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                    Pro Features
-                  </h3>
-                  {isProUser ? (
-                    <span className="px-3 py-1 text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full">
-                      Active
-                    </span>
-                  ) : (
-                    <span className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full">
-                      Free
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  Upgrade to Pro for ad-free experience and extended features
-                </p>
-                {!isProUser && (
-                  <button
-                    onClick={() => setIsProUser(true)}
-                    className="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium"
-                  >
-                    Upgrade to Pro
-                  </button>
-                )}
-              </div>
-            </div>
+            <ins 
+              className="adsbygoogle" 
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-9460974170228372"
+              data-ad-slot="1101018584" // Replace with your actual ad slot ID
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            />
           </div>
         </div>
       </div>

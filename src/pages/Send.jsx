@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Upload, Lock, Copy, QrCode } from "lucide-react";
 import QRCode from "react-qr-code";
 import { supabase } from "../lib/supabase";
@@ -9,8 +9,21 @@ export default function Send() {
   const [isConfidential, setIsConfidential] = useState(false);
   const [encryptionKey, setEncryptionKey] = useState("");
   const [generatedCode, setGeneratedCode] = useState(null);
-  const fileInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [adLoaded, setAdLoaded] = useState(false);
+  const fileInputRef = useRef(null);
+
+  // Load ads when code is generated
+  useEffect(() => {
+    if (generatedCode && !adLoaded) {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        setAdLoaded(true);
+      } catch (err) {
+        console.error("AdSense error:", err);
+      }
+    }
+  }, [generatedCode, adLoaded]);
 
   const handleFileUpload = (event) => {
     const file = event.target.files?.[0];
@@ -21,16 +34,6 @@ export default function Send() {
       };
       reader.readAsText(file);
     }
-  };
-
-  const generateCode = () => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const code = Math.floor(1000 + Math.random() * 9000).toString();
-      setGeneratedCode(code);
-      setIsLoading(false);
-    }, 1000);
   };
 
   const copyToClipboard = (text) => {
@@ -63,7 +66,6 @@ export default function Send() {
 
       const data = await response.json();
       setGeneratedCode(data.code);
-      alert(`text send the code is `, data.code);
     } catch (error) {
       console.error("Error:", error);
       alert(error.message || "Failed to send clipboard content");
@@ -95,14 +97,14 @@ export default function Send() {
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard Sender" />
         <meta itemProp="description" content="Secure clipboard sender for BMSCE/BMSIT students and faculty" />
-        <meta itemProp="image" content="https://bmsclipboard.example.com/send-preview.png" />
+        <meta itemProp="image" content="https://bmsclipboard.netlify.app/send-preview.png" />
         
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.example.com/send" />
+        <meta property="og:url" content="https://bmsclipboard.netlify.app/send" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard Sender" />
         <meta property="og:description" content="Securely send clipboard content for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.example.com/send-preview.png" />
+        <meta property="og:image" content="https://bmsclipboard.netlify.app/send-preview.png" />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
         
@@ -110,7 +112,7 @@ export default function Send() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard Sender" />
         <meta name="twitter:description" content="Securely send clipboard content for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.example.com/send-preview.png" />
+        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/send-preview.png" />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
         
@@ -119,14 +121,33 @@ export default function Send() {
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
         
-        {/* Google Ads Script */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
+        {/* Google Ads Script - Only loads when code is generated */}
+        {generatedCode && (
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossOrigin="anonymous"></script>
+        )}
       </Helmet>
 
-      <div className="max-w-2xl p-[-1000px] mx-auto py-8">
+      <div className="max-w-2xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
           Send Clipboard
         </h1>
+
+        {/* Content for empty state to ensure AdSense compliance */}
+        {!generatedCode && (
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              How to send content securely
+            </h2>
+            <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+              <li>Paste your text content or upload a file</li>
+              <li>Mark as confidential for sensitive information</li>
+              <li>Set an encryption key for confidential content</li>
+              <li>Generate a unique 4-digit code to share</li>
+              <li>Content will be available for 15 minutes</li>
+              <li>For BMSCE/BMSIT students and faculty only</li>
+            </ul>
+          </div>
+        )}
 
         <div className="space-y-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
@@ -201,6 +222,20 @@ export default function Send() {
               )}
             </button>
           </div>
+
+          {/* AdSense Ad Unit - Only shows when code is generated */}
+          {generatedCode && (
+            <div className="my-8">
+              <p className="text-xs text-gray-500 text-center mb-1">Advertisement</p>
+              <ins className="adsbygoogle"
+                style={{ display: 'block' }}
+                data-ad-client="ca-pub-9460974170228372"
+                data-ad-slot="1101018584" // Replace with your actual ad slot ID
+                data-ad-format="auto"
+                data-full-width-responsive="true"
+              ></ins>
+            </div>
+          )}
 
           {generatedCode && (
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">

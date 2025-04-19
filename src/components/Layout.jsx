@@ -60,7 +60,7 @@ export default function Layout({ children }) {
               <Clipboard className="h-8 md:ml-[0px] ml-[80px] w-8 text-indigo-600 dark:text-indigo-400 relative z-10" />
             </div>
             <Link to="/">
-              <span className="text-xl  font-bold">ClipVault</span>
+              <span className="text-xl  font-bold">BMS Clipboard</span>
             </Link>
           </div>
           {/* <button
@@ -164,7 +164,7 @@ export default function Layout({ children }) {
                   <Link to="/" className="flex items-center">
                     <Clipboard className="h-7 w-7 text-indigo-600 dark:text-indigo-400" />
                     <span className="ml-2 text-lg font-bold text-gray-900 dark:text-white">
-                      ClipVault
+                      BMS Clipboard
                     </span>
                   </Link>
                 </div>

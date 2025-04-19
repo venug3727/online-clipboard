@@ -11,6 +11,21 @@ export default function CustomUrl() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Initialize AdSense ads after component mount
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      if (shortUrl) {
+        // Initialize second ad only when results are shown
+        setTimeout(() => {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        }, 100);
+      }
+    } catch (e) {
+      console.error("AdSense error:", e);
+    }
+  }, [shortUrl]);
+
   const generateShortUrl = async (e) => {
     e.preventDefault();
     setError("");
@@ -127,14 +142,14 @@ export default function CustomUrl() {
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard URL Shortener" />
         <meta itemProp="description" content="Secure URL shortener for BMSCE/BMSIT students and faculty" />
-        <meta itemProp="image" content="https://bmsclipboard.example.com/logo.png" />
+        <meta itemProp="image" content="https://bmsclipboard.netlify.app/logo.png" />
         
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.example.com/custom-url" />
+        <meta property="og:url" content="https://bmsclipboard.netlify.app/custom-url" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard URL Shortener" />
         <meta property="og:description" content="Create custom short URLs for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.example.com/url-shortener-preview.png" />
+        <meta property="og:image" content="https://bmsclipboard.netlify.app/url-shortener-preview.png" />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
         
@@ -142,7 +157,7 @@ export default function CustomUrl() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard URL Shortener" />
         <meta name="twitter:description" content="Create custom short URLs for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.example.com/url-shortener-preview.png" />
+        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/url-shortener-preview.png" />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
         
@@ -155,7 +170,6 @@ export default function CustomUrl() {
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
       </Helmet>
 
-      {/* ALL EXISTING CONTENT REMAINS EXACTLY THE SAME BELOW THIS LINE */}
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Custom URL Shortener
@@ -163,6 +177,40 @@ export default function CustomUrl() {
         <p className="text-lg text-gray-600 dark:text-gray-300">
           Create memorable short links under your domain
         </p>
+      </div>
+
+      {/* Educational content section to enhance page value */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Why Use a Custom URL Shortener?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <h3 className="font-medium text-gray-900 dark:text-white mb-2">Enhanced Branding</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Custom short URLs with your BMSCE/BMSIT identity create a more professional appearance and increase trust.
+            </p>
+          </div>
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <h3 className="font-medium text-gray-900 dark:text-white mb-2">Better Tracking</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Create separate links for different channels to analyze which platforms generate the most engagement.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* AdSense Ad Unit 1 - Before the form */}
+      <div className="mb-8 text-center">
+        <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-9460974170228372"
+          data-ad-slot="1234567890" // Replace with your actual ad slot ID
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
@@ -237,84 +285,148 @@ export default function CustomUrl() {
         </form>
       </div>
 
-      {shortUrl && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Your Short URL
-          </h2>
-          
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg mb-6">
-            <div className="flex items-center overflow-hidden">
-              <ExternalLink className="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 flex-shrink-0" />
-              <a
-                href={shortUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-indigo-600 dark:text-indigo-400 hover:underline truncate"
-              >
-                {shortUrl}
-              </a>
-            </div>
-            <button
-              onClick={copyToClipboard}
-              className="p-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
-              aria-label="Copy URL to clipboard"
-            >
-              {copied ? (
-                <CheckCircle className="h-5 w-5 text-green-500" />
-              ) : (
-                <Copy className="h-5 w-5" />
-              )}
-            </button>
-          </div>
+      {/* Tips for effective URL usage - More value content */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Tips for Effective Short URLs
+        </h2>
+        <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+          <li className="flex items-start">
+            <span className="inline-block w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2 mr-2"></span>
+            <span>Keep custom paths short but meaningful (ex: "bmsit-exam" or "bmsce-lab")</span>
+          </li>
+          <li className="flex items-start">
+            <span className="inline-block w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2 mr-2"></span>
+            <span>Use consistent naming conventions for departmental links</span>
+          </li>
+          <li className="flex items-start">
+            <span className="inline-block w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2 mr-2"></span>
+            <span>For printed materials, use easy-to-type paths (avoid similar-looking characters)</span>
+          </li>
+        </ul>
+      </div>
 
-          <div className="text-center">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
-              QR Code
-            </h3>
-            <div className="p-4 bg-white dark:bg-gray-100 border border-gray-200 dark:border-gray-700 rounded-lg inline-block">
-              <QRCode
-                value={shortUrl}
-                size={160}
-                level="H"  // High error correction
-                bgColor="transparent"
-                fgColor={document.documentElement.classList.contains('dark') ? '#000' : '#000'}
-                className="mx-auto"
-              />
-            </div>
-            <div className="mt-4">
+      {shortUrl && (
+        <>
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Your Short URL
+            </h2>
+            
+            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg mb-6">
+              <div className="flex items-center overflow-hidden">
+                <ExternalLink className="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 flex-shrink-0" />
+                <a
+                  href={shortUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 dark:text-indigo-400 hover:underline truncate"
+                >
+                  {shortUrl}
+                </a>
+              </div>
               <button
-                onClick={() => {
-                  const svg = document.getElementById("qr-code-svg");
-                  const svgData = new XMLSerializer().serializeToString(svg);
-                  const canvas = document.createElement("canvas");
-                  const ctx = canvas.getContext("2d");
-                  const img = new Image();
-                  
-                  img.onload = () => {
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    ctx.drawImage(img, 0, 0);
-                    const pngFile = canvas.toDataURL("image/png");
-                    const downloadLink = document.createElement("a");
-                    downloadLink.download = `clipvault-qr-${customPath || "link"}.png`;
-                    downloadLink.href = pngFile;
-                    downloadLink.click();
-                  };
-                  
-                  img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
-                }}
-                className="text-sm px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
+                onClick={copyToClipboard}
+                className="p-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
+                aria-label="Copy URL to clipboard"
               >
-                Download QR Code
+                {copied ? (
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                ) : (
+                  <Copy className="h-5 w-5" />
+                )}
               </button>
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
-              Scan this QR code to access your link
+
+            <div className="text-center">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                QR Code
+              </h3>
+              <div className="p-4 bg-white dark:bg-gray-100 border border-gray-200 dark:border-gray-700 rounded-lg inline-block">
+                <QRCode
+                  value={shortUrl}
+                  size={160}
+                  level="H"  // High error correction
+                  bgColor="transparent"
+                  fgColor={document.documentElement.classList.contains('dark') ? '#000' : '#000'}
+                  className="mx-auto"
+                  id="qr-code-svg"
+                />
+              </div>
+              <div className="mt-4">
+                <button
+                  onClick={() => {
+                    const svg = document.getElementById("qr-code-svg");
+                    const svgData = new XMLSerializer().serializeToString(svg);
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    const img = new Image();
+                    
+                    img.onload = () => {
+                      canvas.width = img.width;
+                      canvas.height = img.height;
+                      ctx.drawImage(img, 0, 0);
+                      const pngFile = canvas.toDataURL("image/png");
+                      const downloadLink = document.createElement("a");
+                      downloadLink.download = `clipvault-qr-${customPath || "link"}.png`;
+                      downloadLink.href = pngFile;
+                      downloadLink.click();
+                    };
+                    
+                    img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
+                  }}
+                  className="text-sm px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
+                >
+                  Download QR Code
+                </button>
+              </div>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
+                Scan this QR code to access your link
+              </p>
+            </div>
+          </div>
+
+          {/* AdSense Ad Unit 2 - After results are shown */}
+          <div className="mb-8 text-center">
+            <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-9460974170228372"
+              data-ad-slot="1101018584" // Replace with your actual ad slot ID
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
+          </div>
+        </>
+      )}
+
+      {/* Additional educational content */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Common URL Shortener Use Cases at BMSCE/BMSIT
+        </h2>
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-medium text-gray-900 dark:text-white">Event Promotion</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Create memorable links for campus events, workshops, and seminars to share on posters and digital announcements.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900 dark:text-white">Department Resources</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Share course materials, lecture notes, and reference documents with clean, easy-to-remember links.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900 dark:text-white">Club Activities</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Distribute registration forms and information for technical and cultural club activities across campus.
             </p>
           </div>
         </div>
-      )}
+      </div>
 
       <div className="mt-10 text-center text-sm text-gray-500 dark:text-gray-400">
         <p>All links are valid for 1 year</p>

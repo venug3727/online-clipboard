@@ -211,7 +211,7 @@ export default function Home() {
                 className="adsbygoogle"
                 style={{ display: "block" }}
                 data-ad-client="ca-pub-9460974170228372"
-                data-ad-slot="0987654321" // Replace with your actual ad slot ID
+                data-ad-slot="1101018584" // Replace with your actual ad slot ID
                 data-ad-format="auto"
                 data-full-width-responsive="true"
               ></ins>

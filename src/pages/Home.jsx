@@ -219,7 +219,7 @@ export default function Home() {
 
             {/* Footer content to add more value */}
             <div className="mt-12 text-center text-sm text-gray-500">
-              <p>© {new Date().getFullYear()} BMS Educational Trust. All rights reserved.</p>
+              <p>© {new Date().getFullYear()} BMSClipboard. All rights reserved.</p>
               <p className="mt-2">
                 A secure clipboard sharing solution for BMS College of Engineering and
                 BMS Institute of Technology students and faculty.

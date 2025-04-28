@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Upload, File, Download, Copy, Trash2, Eye } from "lucide-react";
+import { Upload, File, Download, Copy, Trash2, Eye, CheckCircle, XCircle } from "lucide-react";
 import { Helmet } from "react-helmet";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function FileSharing() {
   const [files, setFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [shareLinks, setShareLinks] = useState([]);
   const fileInputRef = useRef(null);
   const [error, setError] = useState("");
@@ -12,6 +14,7 @@ export default function FileSharing() {
   const [receivedFile, setReceivedFile] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const [adLoaded, setAdLoaded] = useState(false);
+  const [notifications, setNotifications] = useState([]);
 
   // Load ads when component mounts and when content is available
   useEffect(() => {
@@ -25,8 +28,27 @@ export default function FileSharing() {
     }
   }, [files, shareLinks, receivedFile, adLoaded]);
 
+  // Auto-remove notifications after 5 seconds
+  useEffect(() => {
+    if (notifications.length > 0) {
+      const timer = setTimeout(() => {
+        setNotifications(notifications.slice(1));
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [notifications]);
+
+  const addNotification = (message, type = "success") => {
+    const id = Date.now();
+    setNotifications([...notifications, { id, message, type }]);
+  };
+
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
+    if (selectedFiles.some(file => file.size > 100 * 1024 * 1024)) { // 100MB limit
+      setError("File size exceeds 100MB limit");
+      return;
+    }
     setFiles(selectedFiles);
     setError("");
   };
@@ -34,6 +56,7 @@ export default function FileSharing() {
   const handleUpload = async (e) => {
     e.preventDefault();
     setError("");
+    setUploadProgress(0);
 
     if (files.length === 0) {
       setError("Please select a file first");
@@ -47,20 +70,31 @@ export default function FileSharing() {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/files/upload`,
-        {
-          method: "POST",
-          body: formData,
+      const xhr = new XMLHttpRequest();
+      
+      xhr.upload.addEventListener("progress", (event) => {
+        if (event.lengthComputable) {
+          const progress = Math.round((event.loaded / event.total) * 100);
+          setUploadProgress(progress);
         }
-      );
+      });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Upload failed");
-      }
+      const uploadPromise = new Promise((resolve, reject) => {
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              resolve(JSON.parse(xhr.responseText));
+            } else {
+              reject(new Error(xhr.responseText ? JSON.parse(xhr.responseText).detail : "Upload failed"));
+            }
+          }
+        };
 
-      const data = await response.json();
+        xhr.open("POST", `${import.meta.env.VITE_API_BASE_URL}/api/files/upload`);
+        xhr.send(formData);
+      });
+
+      const data = await uploadPromise;
 
       setShareLinks([
         ...shareLinks,
@@ -74,12 +108,16 @@ export default function FileSharing() {
           contentType: data.content_type,
         },
       ]);
+      
       setFiles([]);
+      addNotification(`"${data.file_name}" uploaded successfully! Share code: ${data.share_code}`);
     } catch (err) {
       console.error("Upload error:", err);
       setError(err.message);
+      addNotification(`Upload failed: ${err.message}`, "error");
     } finally {
       setIsUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -111,9 +149,11 @@ export default function FileSharing() {
         expires: new Date(data.expires_at).toLocaleDateString(),
         contentType: data.content_type,
       });
+      addNotification(`File "${data.file_name}" loaded successfully!`);
     } catch (err) {
       console.error("Fetch error:", err);
       setError(err.message);
+      addNotification(`Error: ${err.message}`, "error");
     } finally {
       setIsFetching(false);
     }
@@ -121,10 +161,14 @@ export default function FileSharing() {
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    // Optional: Show a toast notification
+    addNotification("Copied to clipboard!");
   };
 
   const deleteLink = (id) => {
+    const linkToDelete = shareLinks.find(link => link.id === id);
+    if (linkToDelete) {
+      addNotification(`Removed shared file "${linkToDelete.name}"`);
+    }
     setShareLinks(shareLinks.filter((link) => link.id !== id));
   };
 
@@ -262,7 +306,39 @@ export default function FileSharing() {
         )}
       </Helmet>
 
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-8 relative">
+        {/* Notification Center */}
+        <div className="fixed top-4 right-4 z-50 w-80 space-y-2">
+          <AnimatePresence>
+            {notifications.map((notification) => (
+              <motion.div
+                key={notification.id}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 100 }}
+                className={`p-4 rounded-lg shadow-lg flex items-start ${
+                  notification.type === "error"
+                    ? "bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400"
+                    : "bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-600 dark:text-green-400"
+                }`}
+              >
+                {notification.type === "error" ? (
+                  <XCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                ) : (
+                  <CheckCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                )}
+                <span className="flex-1">{notification.message}</span>
+                <button
+                  onClick={() => setNotifications(notifications.filter(n => n.id !== notification.id))}
+                  className="ml-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                >
+                  <XCircle className="h-5 w-5" />
+                </button>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           File Sharing
         </h1>
@@ -284,12 +360,14 @@ export default function FileSharing() {
               <li>4-digit access codes for easy sharing</li>
               <li>Preview images, PDFs, and text files</li>
               <li>Built specifically for BMSCE/BMSIT community</li>
+              <li>100MB maximum file size</li>
             </ul>
           </div>
         )}
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400">
+          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 flex items-center">
+            <XCircle className="h-5 w-5 mr-2" />
             {error}
           </div>
         )}
@@ -320,11 +398,37 @@ export default function FileSharing() {
                   disabled={files.length === 0 || isUploading}
                   className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:bg-gray-400"
                 >
-                  {isUploading ? "Uploading..." : "Upload File"}
+                  {isUploading ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Uploading...
+                    </>
+                  ) : "Upload File"}
                 </button>
               </div>
 
-              {files.length > 0 && (
+              {/* Upload Progress Bar */}
+              {isUploading && (
+                <div className="mt-4">
+                  <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-1">
+                    <span>Uploading: {files[0]?.name}</span>
+                    <span>{uploadProgress}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <motion.div
+                      className="bg-indigo-600 h-2.5 rounded-full"
+                      initial={{ width: "0%" }}
+                      animate={{ width: `${uploadProgress}%` }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {files.length > 0 && !isUploading && (
                 <div className="mt-3">
                   <ul className="space-y-1">
                     {files.map((file, index) => (
@@ -365,7 +469,15 @@ export default function FileSharing() {
               disabled={isFetching || codeInput.length !== 4}
               className="flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg disabled:bg-gray-400"
             >
-              {isFetching ? "Loading..." : (
+              {isFetching ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Loading...
+                </>
+              ) : (
                 <>
                   <Eye className="h-5 w-5 mr-2" />
                   View

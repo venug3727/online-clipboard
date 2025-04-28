@@ -17,18 +17,38 @@ import {
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 
-export default function Home() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Initialize AdSense ads after component mounts
+const AdSenseAd = ({ slotId }) => {
   useEffect(() => {
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      // Only push if adsbygoogle is loaded and this ad hasn't been pushed
+      if (window.adsbygoogle && !window.adsbygoogle.loaded) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
     } catch (e) {
       console.error("AdSense error:", e);
     }
   }, []);
+
+  return (
+    <div className="mb-8 text-center">
+      <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
+      <ins
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client="ca-pub-9460974170228372"
+        data-ad-slot={slotId}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </div>
+  );
+};
+
+export default function Home() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Initialize AdSense ads after component mounts
+  
 
   return (
     <>
@@ -102,17 +122,7 @@ export default function Home() {
             </div>
 
             {/* AdSense Ad Unit 1 - Placed between content sections */}
-            <div className="my-8 mx-auto max-w-2xl text-center">
-              <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
-              <ins
-                className="adsbygoogle"
-                style={{ display: "block" }}
-                data-ad-client="ca-pub-9460974170228372"
-                data-ad-slot="1101018584" // Replace with your actual ad slot ID
-                data-ad-format="auto"
-                data-full-width-responsive="true"
-              ></ins>
-            </div>
+            <AdSenseAd slotId="1101018584" />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mx-auto mb-16 stagger-animate">
               <Link
@@ -205,17 +215,7 @@ export default function Home() {
             </div>
 
             {/* AdSense Ad Unit 2 - Placed at bottom of page */}
-            <div className="my-8 mx-auto max-w-2xl text-center">
-              <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
-              <ins
-                className="adsbygoogle"
-                style={{ display: "block" }}
-                data-ad-client="ca-pub-9460974170228372"
-                data-ad-slot="1101018584" // Replace with your actual ad slot ID
-                data-ad-format="auto"
-                data-full-width-responsive="true"
-              ></ins>
-            </div>
+            <AdSenseAd slotId="7843256991" />
 
             {/* Footer content to add more value */}
             <div className="mt-12 text-center text-sm text-gray-500">

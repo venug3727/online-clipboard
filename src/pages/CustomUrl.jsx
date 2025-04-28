@@ -3,6 +3,34 @@ import { Link, Copy, CheckCircle, ExternalLink } from "lucide-react";
 import { Helmet } from "react-helmet";
 import QRCode from "react-qr-code";
 
+// AdSense Ad Component
+const AdSenseAd = ({ slotId }) => {
+  useEffect(() => {
+    try {
+      // Only push if adsbygoogle is loaded and this ad hasn't been pushed
+      if (window.adsbygoogle && !window.adsbygoogle.loaded) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    } catch (e) {
+      console.error("AdSense error:", e);
+    }
+  }, []);
+
+  return (
+    <div className="mb-8 text-center">
+      <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
+      <ins
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client="ca-pub-9460974170228372"
+        data-ad-slot={slotId}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </div>
+  );
+};
+
 export default function CustomUrl() {
   const [originalUrl, setOriginalUrl] = useState("");
   const [customPath, setCustomPath] = useState("");
@@ -10,21 +38,6 @@ export default function CustomUrl() {
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  // Initialize AdSense ads after component mount
-  useEffect(() => {
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-      if (shortUrl) {
-        // Initialize second ad only when results are shown
-        setTimeout(() => {
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        }, 100);
-      }
-    } catch (e) {
-      console.error("AdSense error:", e);
-    }
-  }, [shortUrl]);
 
   const generateShortUrl = async (e) => {
     e.preventDefault();
@@ -179,7 +192,7 @@ export default function CustomUrl() {
         </p>
       </div>
 
-      {/* Educational content section to enhance page value */}
+      {/* Educational content section */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
           Why Use a Custom URL Shortener?
@@ -200,7 +213,9 @@ export default function CustomUrl() {
         </div>
       </div>
 
-      
+      {/* AdSense Ad Unit 1 - Before the form */}
+      <AdSenseAd slotId="1101018584" />
+
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
         <form onSubmit={generateShortUrl}>
           <div className="mb-6">
@@ -273,7 +288,7 @@ export default function CustomUrl() {
         </form>
       </div>
 
-      {/* Tips for effective URL usage - More value content */}
+      {/* Tips for effective URL usage */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
           Tips for Effective Short URLs
@@ -334,7 +349,7 @@ export default function CustomUrl() {
                 <QRCode
                   value={shortUrl}
                   size={160}
-                  level="H"  // High error correction
+                  level="H"
                   bgColor="transparent"
                   fgColor={document.documentElement.classList.contains('dark') ? '#000' : '#000'}
                   className="mx-auto"
@@ -375,17 +390,7 @@ export default function CustomUrl() {
           </div>
 
           {/* AdSense Ad Unit 2 - After results are shown */}
-          <div className="mb-8 text-center">
-            <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
-            <ins
-              className="adsbygoogle"
-              style={{ display: "block" }}
-              data-ad-client="ca-pub-9460974170228372"
-              data-ad-slot="1101018584" // Replace with your actual ad slot ID
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-          </div>
+          <AdSenseAd slotId="7843256991" />
         </>
       )}
 

@@ -3,20 +3,40 @@ import { Moon, Clock, CreditCard } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { Helmet } from "react-helmet";
 
+const AdSenseAd = ({ slotId }) => {
+  useEffect(() => {
+    try {
+      // Only push if adsbygoogle is loaded and this ad hasn't been pushed
+      if (window.adsbygoogle && !window.adsbygoogle.loaded) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    } catch (e) {
+      console.error("AdSense error:", e);
+    }
+  }, []);
+
+  return (
+    <div className="mb-8 text-center">
+      <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
+      <ins
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client="ca-pub-9460974170228372"
+        data-ad-slot={slotId}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+    </div>
+  );
+};
+
 export default function Settings() {
   const { darkMode, toggleDarkMode } = useTheme();
   const [autoClearMinutes, setAutoClearMinutes] = useState(15);
   const [isProUser, setIsProUser] = useState(false);
 
   // Initialize AdSense ads after component mounts
-  useEffect(() => {
-    try {
-      // This is how we trigger AdSense to look for ad slots
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (error) {
-      console.error("AdSense error:", error);
-    }
-  }, []);
+  
 
   return (
     <>
@@ -126,14 +146,7 @@ export default function Settings() {
 
           {/* AdSense Ad Unit */}
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-            <ins 
-              className="adsbygoogle" 
-              style={{ display: "block" }}
-              data-ad-client="ca-pub-9460974170228372"
-              data-ad-slot="1101018584" // Replace with your actual ad slot ID
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            />
+           < AdSenseAd slotId="1101018584" />
           </div>
         </div>
       </div>

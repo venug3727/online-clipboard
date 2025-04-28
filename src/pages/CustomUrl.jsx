@@ -200,19 +200,7 @@ export default function CustomUrl() {
         </div>
       </div>
 
-      {/* AdSense Ad Unit 1 - Before the form */}
-      <div className="mb-8 text-center">
-        <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-9460974170228372"
-          data-ad-slot="1234567890" // Replace with your actual ad slot ID
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
-      </div>
-
+      
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
         <form onSubmit={generateShortUrl}>
           <div className="mb-6">

@@ -35,8 +35,18 @@ export default function Settings() {
   const [autoClearMinutes, setAutoClearMinutes] = useState(15);
   const [isProUser, setIsProUser] = useState(false);
 
-  // Initialize AdSense ads after component mounts
-  
+  // Manually load AdSense script without React Helmet
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    document.head.appendChild(script);
+    
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
   return (
     <>
@@ -84,9 +94,6 @@ export default function Settings() {
         <meta name="institution" content="BMSCE, BMSIT" />
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
-        
-        {/* Google Ads Script */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
       </Helmet>
 
       <div className="max-w-2xl mx-auto py-8">
@@ -146,7 +153,7 @@ export default function Settings() {
 
           {/* AdSense Ad Unit */}
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-           < AdSenseAd slotId="1101018584" />
+            <AdSenseAd slotId="1101018584" />
           </div>
         </div>
       </div>

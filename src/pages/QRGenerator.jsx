@@ -12,7 +12,11 @@ export default function QRGenerator() {
 
   // Load ads when component mounts and when QR code is generated
   useEffect(() => {
-    if (qrValue && qrValue !== "https://bmsclipboard.netlify.app" && !adLoaded) {
+    if (
+      qrValue &&
+      qrValue !== "https://bmsclipboard.netlify.app" &&
+      !adLoaded
+    ) {
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
         setAdLoaded(true);
@@ -75,37 +79,62 @@ export default function QRGenerator() {
         <meta name="robots" content="index, follow" />
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
-        
+
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard QR Generator" />
-        <meta itemProp="description" content="Secure QR code generator for BMSCE/BMSIT students and faculty" />
-        <meta itemProp="image" content="https://bmsclipboard.netlify.app/qr-generator-preview.png" />
-        
+        <meta
+          itemProp="description"
+          content="Secure QR code generator for BMSCE/BMSIT students and faculty"
+        />
+        <meta
+          itemProp="image"
+          content="https://bmsclipboard.netlify.app/qr-generator-preview.png"
+        />
+
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.netlify.app/qr-generator" />
+        <meta
+          property="og:url"
+          content="https://bmsclipboard.netlify.app/qr-generator"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard QR Generator" />
-        <meta property="og:description" content="Generate QR codes for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.netlify.app/qr-generator-preview.png" />
+        <meta
+          property="og:description"
+          content="Generate QR codes for BMSCE/BMSIT community"
+        />
+        <meta
+          property="og:image"
+          content="https://bmsclipboard.netlify.app/qr-generator-preview.png"
+        />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
-        
+
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard QR Generator" />
-        <meta name="twitter:description" content="Generate QR codes for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/qr-generator-preview.png" />
+        <meta
+          name="twitter:description"
+          content="Generate QR codes for BMSCE/BMSIT community"
+        />
+        <meta
+          name="twitter:image"
+          content="https://bmsclipboard.netlify.app/qr-generator-preview.png"
+        />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
-        
+
         {/* Institution Specific Tags */}
         <meta name="institution" content="BMSCE, BMSIT" />
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
-        
+
         {/* Google Ads Script - Only loads when there's content */}
         {qrValue && qrValue !== "https://bmsclipboard.netlify.app" && (
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossOrigin="anonymous"></script>
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
+            crossOrigin="anonymous"
+          ></script>
         )}
       </Helmet>
 
@@ -113,7 +142,6 @@ export default function QRGenerator() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           QR Code Generator
         </h1>
-
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
           <form onSubmit={generateQR} className="mb-6">
             <div className="flex gap-3">
@@ -163,21 +191,23 @@ export default function QRGenerator() {
             </div>
           </div>
         </div>
-
         {/* AdSense Ad Unit - Only shows when QR code is generated */}
+        {/* // Only show ads when QR code is generated (not default) */}
         {qrValue && qrValue !== "https://bmsclipboard.netlify.app" && (
           <div className="my-8">
-            <p className="text-xs text-gray-500 text-center mb-1">Advertisement</p>
-            <ins className="adsbygoogle"
-              style={{ display: 'block' }}
+            <p className="text-xs text-gray-500 text-center mb-1">
+              Advertisement
+            </p>
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
               data-ad-client="ca-pub-9460974170228372"
-              data-ad-slot="1101018584" // Replace with your actual ad slot ID
+              data-ad-slot="1101018584"
               data-ad-format="auto"
               data-full-width-responsive="true"
             ></ins>
           </div>
         )}
-
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
             How to use

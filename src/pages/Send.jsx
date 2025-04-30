@@ -93,37 +93,62 @@ export default function Send() {
         <meta name="robots" content="index, follow" />
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
-        
+
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard Sender" />
-        <meta itemProp="description" content="Secure clipboard sender for BMSCE/BMSIT students and faculty" />
-        <meta itemProp="image" content="https://bmsclipboard.netlify.app/send-preview.png" />
-        
+        <meta
+          itemProp="description"
+          content="Secure clipboard sender for BMSCE/BMSIT students and faculty"
+        />
+        <meta
+          itemProp="image"
+          content="https://bmsclipboard.netlify.app/send-preview.png"
+        />
+
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.netlify.app/send" />
+        <meta
+          property="og:url"
+          content="https://bmsclipboard.netlify.app/send"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard Sender" />
-        <meta property="og:description" content="Securely send clipboard content for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.netlify.app/send-preview.png" />
+        <meta
+          property="og:description"
+          content="Securely send clipboard content for BMSCE/BMSIT community"
+        />
+        <meta
+          property="og:image"
+          content="https://bmsclipboard.netlify.app/send-preview.png"
+        />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
-        
+
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard Sender" />
-        <meta name="twitter:description" content="Securely send clipboard content for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/send-preview.png" />
+        <meta
+          name="twitter:description"
+          content="Securely send clipboard content for BMSCE/BMSIT community"
+        />
+        <meta
+          name="twitter:image"
+          content="https://bmsclipboard.netlify.app/send-preview.png"
+        />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
-        
+
         {/* Institution Specific Tags */}
         <meta name="institution" content="BMSCE, BMSIT" />
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
-        
+
         {/* Google Ads Script - Only loads when code is generated */}
         {generatedCode && (
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossOrigin="anonymous"></script>
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
+            crossOrigin="anonymous"
+          ></script>
         )}
       </Helmet>
 
@@ -175,7 +200,6 @@ export default function Send() {
               />
             </div>
           </div>
-
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <label className="flex items-center space-x-3 mb-6">
               <input
@@ -222,21 +246,23 @@ export default function Send() {
               )}
             </button>
           </div>
-
           {/* AdSense Ad Unit - Only shows when code is generated */}
+          {/* // Only show ads when code is generated */}
           {generatedCode && (
             <div className="my-8">
-              <p className="text-xs text-gray-500 text-center mb-1">Advertisement</p>
-              <ins className="adsbygoogle"
-                style={{ display: 'block' }}
+              <p className="text-xs text-gray-500 text-center mb-1">
+                Advertisement
+              </p>
+              <ins
+                className="adsbygoogle"
+                style={{ display: "block" }}
                 data-ad-client="ca-pub-9460974170228372"
-                data-ad-slot="1101018584" // Replace with your actual ad slot ID
+                data-ad-slot="1101018584"
                 data-ad-format="auto"
                 data-full-width-responsive="true"
               ></ins>
             </div>
           )}
-
           {generatedCode && (
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
               <div className="text-center mb-6">
@@ -261,8 +287,8 @@ export default function Send() {
               </div>
 
               <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                Share this code with the recipient. The content will be available
-                for the next 15 minutes.
+                Share this code with the recipient. The content will be
+                available for the next 15 minutes.
               </p>
             </div>
           )}

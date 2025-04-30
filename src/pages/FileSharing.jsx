@@ -1,5 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Upload, File, Download, Copy, Trash2, Eye, CheckCircle, XCircle } from "lucide-react";
+import {
+  Upload,
+  File,
+  Download,
+  Copy,
+  Trash2,
+  Eye,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 import { Helmet } from "react-helmet";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -18,7 +27,10 @@ export default function FileSharing() {
 
   // Load ads when component mounts and when content is available
   useEffect(() => {
-    if ((files.length > 0 || shareLinks.length > 0 || receivedFile) && !adLoaded) {
+    if (
+      (files.length > 0 || shareLinks.length > 0 || receivedFile) &&
+      !adLoaded
+    ) {
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
         setAdLoaded(true);
@@ -45,7 +57,8 @@ export default function FileSharing() {
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-    if (selectedFiles.some(file => file.size > 100 * 1024 * 1024)) { // 100MB limit
+    if (selectedFiles.some((file) => file.size > 100 * 1024 * 1024)) {
+      // 100MB limit
       setError("File size exceeds 100MB limit");
       return;
     }
@@ -71,7 +84,7 @@ export default function FileSharing() {
       formData.append("file", selectedFile);
 
       const xhr = new XMLHttpRequest();
-      
+
       xhr.upload.addEventListener("progress", (event) => {
         if (event.lengthComputable) {
           const progress = Math.round((event.loaded / event.total) * 100);
@@ -85,12 +98,21 @@ export default function FileSharing() {
             if (xhr.status === 200) {
               resolve(JSON.parse(xhr.responseText));
             } else {
-              reject(new Error(xhr.responseText ? JSON.parse(xhr.responseText).detail : "Upload failed"));
+              reject(
+                new Error(
+                  xhr.responseText
+                    ? JSON.parse(xhr.responseText).detail
+                    : "Upload failed"
+                )
+              );
             }
           }
         };
 
-        xhr.open("POST", `${import.meta.env.VITE_API_BASE_URL}/api/files/upload`);
+        xhr.open(
+          "POST",
+          `${import.meta.env.VITE_API_BASE_URL}/api/files/upload`
+        );
         xhr.send(formData);
       });
 
@@ -108,9 +130,11 @@ export default function FileSharing() {
           contentType: data.content_type,
         },
       ]);
-      
+
       setFiles([]);
-      addNotification(`"${data.file_name}" uploaded successfully! Share code: ${data.share_code}`);
+      addNotification(
+        `"${data.file_name}" uploaded successfully! Share code: ${data.share_code}`
+      );
     } catch (err) {
       console.error("Upload error:", err);
       setError(err.message);
@@ -165,7 +189,7 @@ export default function FileSharing() {
   };
 
   const deleteLink = (id) => {
-    const linkToDelete = shareLinks.find(link => link.id === id);
+    const linkToDelete = shareLinks.find((link) => link.id === id);
     if (linkToDelete) {
       addNotification(`Removed shared file "${linkToDelete.name}"`);
     }
@@ -184,7 +208,7 @@ export default function FileSharing() {
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Received File
         </h2>
-        
+
         <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
           <div className="flex justify-between items-start mb-4">
             <div>
@@ -199,7 +223,7 @@ export default function FileSharing() {
                 Expires: {receivedFile.expires}
               </p>
             </div>
-            
+
             <div className="flex gap-2">
               <a
                 href={receivedFile.downloadUrl}
@@ -272,37 +296,62 @@ export default function FileSharing() {
         <meta name="robots" content="index, follow" />
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
-        
+
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard File Sharing" />
-        <meta itemProp="description" content="Secure file sharing platform for BMSCE/BMSIT students and faculty" />
-        <meta itemProp="image" content="https://bmsclipboard.netlify.app/file-sharing-preview.png" />
-        
+        <meta
+          itemProp="description"
+          content="Secure file sharing platform for BMSCE/BMSIT students and faculty"
+        />
+        <meta
+          itemProp="image"
+          content="https://bmsclipboard.netlify.app/file-sharing-preview.png"
+        />
+
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.netlify.app/file-sharing" />
+        <meta
+          property="og:url"
+          content="https://bmsclipboard.netlify.app/file-sharing"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard File Sharing" />
-        <meta property="og:description" content="Secure file sharing for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.netlify.app/file-sharing-preview.png" />
+        <meta
+          property="og:description"
+          content="Secure file sharing for BMSCE/BMSIT community"
+        />
+        <meta
+          property="og:image"
+          content="https://bmsclipboard.netlify.app/file-sharing-preview.png"
+        />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
-        
+
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard File Sharing" />
-        <meta name="twitter:description" content="Secure file sharing for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/file-sharing-preview.png" />
+        <meta
+          name="twitter:description"
+          content="Secure file sharing for BMSCE/BMSIT community"
+        />
+        <meta
+          name="twitter:image"
+          content="https://bmsclipboard.netlify.app/file-sharing-preview.png"
+        />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
-        
+
         {/* Institution Specific Tags */}
         <meta name="institution" content="BMSCE, BMSIT" />
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
-        
+
         {/* Google Ads Script - Only loads when there's content */}
         {(files.length > 0 || shareLinks.length > 0 || receivedFile) && (
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossOrigin="anonymous"></script>
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
+            crossOrigin="anonymous"
+          ></script>
         )}
       </Helmet>
 
@@ -329,7 +378,11 @@ export default function FileSharing() {
                 )}
                 <span className="flex-1">{notification.message}</span>
                 <button
-                  onClick={() => setNotifications(notifications.filter(n => n.id !== notification.id))}
+                  onClick={() =>
+                    setNotifications(
+                      notifications.filter((n) => n.id !== notification.id)
+                    )
+                  }
                   className="ml-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                 >
                   <XCircle className="h-5 w-5" />
@@ -338,11 +391,9 @@ export default function FileSharing() {
             ))}
           </AnimatePresence>
         </div>
-
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           File Sharing
         </h1>
-
         {/* Content for empty state to ensure AdSense compliance */}
         {!files.length && !shareLinks.length && !receivedFile && (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
@@ -350,10 +401,13 @@ export default function FileSharing() {
               About BMSClipboard File Sharing
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              Securely share files with BMSCE and BMSIT students and faculty. 
-              Our platform provides encrypted temporary file storage with unique access codes.
+              Securely share files with BMSCE and BMSIT students and faculty.
+              Our platform provides encrypted temporary file storage with unique
+              access codes.
             </p>
-            <h3 className="font-medium text-gray-900 dark:text-white mb-2">Features:</h3>
+            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+              Features:
+            </h3>
             <ul className="list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-1">
               <li>End-to-end encrypted file transfers</li>
               <li>Auto-expiring links (7 days)</li>
@@ -364,14 +418,12 @@ export default function FileSharing() {
             </ul>
           </div>
         )}
-
         {error && (
           <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 flex items-center">
             <XCircle className="h-5 w-5 mr-2" />
             {error}
           </div>
         )}
-
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Upload Files
@@ -400,13 +452,31 @@ export default function FileSharing() {
                 >
                   {isUploading ? (
                     <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
                       </svg>
                       Uploading...
                     </>
-                  ) : "Upload File"}
+                  ) : (
+                    "Upload File"
+                  )}
                 </button>
               </div>
 
@@ -437,7 +507,8 @@ export default function FileSharing() {
                         className="flex items-center text-sm text-gray-700 dark:text-gray-300"
                       >
                         <File className="h-4 w-4 mr-2" />
-                        {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+                        {file.name} ({(file.size / (1024 * 1024)).toFixed(2)}{" "}
+                        MB)
                       </li>
                     ))}
                   </ul>
@@ -446,7 +517,6 @@ export default function FileSharing() {
             </div>
           </form>
         </div>
-
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Access Shared File
@@ -456,7 +526,7 @@ export default function FileSharing() {
               type="text"
               value={codeInput}
               onChange={(e) => {
-                const val = e.target.value.replace(/\D/g, '').slice(0, 4);
+                const val = e.target.value.replace(/\D/g, "").slice(0, 4);
                 setCodeInput(val);
                 setError("");
               }}
@@ -471,9 +541,25 @@ export default function FileSharing() {
             >
               {isFetching ? (
                 <>
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                   Loading...
                 </>
@@ -486,23 +572,24 @@ export default function FileSharing() {
             </button>
           </div>
         </div>
-
         {/* AdSense Ad Unit - Only shows when there's content */}
+        {/* // Only show ads when there's actual content */}
         {(files.length > 0 || shareLinks.length > 0 || receivedFile) && (
           <div className="my-8">
-            <p className="text-xs text-gray-500 text-center mb-1">Advertisement</p>
-            <ins className="adsbygoogle"
-              style={{ display: 'block' }}
+            <p className="text-xs text-gray-500 text-center mb-1">
+              Advertisement
+            </p>
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
               data-ad-client="ca-pub-9460974170228372"
-              data-ad-slot="1101018584" // Replace with your actual ad slot ID
+              data-ad-slot="1101018584"
               data-ad-format="auto"
               data-full-width-responsive="true"
             ></ins>
           </div>
         )}
-
         {renderFilePreview()}
-
         {shareLinks.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mt-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">

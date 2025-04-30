@@ -85,37 +85,62 @@ export default function Receive() {
         <meta name="robots" content="index, follow" />
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
-        
+
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard Receiver" />
-        <meta itemProp="description" content="Secure clipboard receiver for BMSCE/BMSIT students and faculty" />
-        <meta itemProp="image" content="https://bmsclipboard.netlify.app/receive-preview.png" />
-        
+        <meta
+          itemProp="description"
+          content="Secure clipboard receiver for BMSCE/BMSIT students and faculty"
+        />
+        <meta
+          itemProp="image"
+          content="https://bmsclipboard.netlify.app/receive-preview.png"
+        />
+
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.netlify.app/receive" />
+        <meta
+          property="og:url"
+          content="https://bmsclipboard.netlify.app/receive"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard Receiver" />
-        <meta property="og:description" content="Securely receive clipboard content for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.netlify.app/receive-preview.png" />
+        <meta
+          property="og:description"
+          content="Securely receive clipboard content for BMSCE/BMSIT community"
+        />
+        <meta
+          property="og:image"
+          content="https://bmsclipboard.netlify.app/receive-preview.png"
+        />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
-        
+
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard Receiver" />
-        <meta name="twitter:description" content="Securely receive clipboard content for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/receive-preview.png" />
+        <meta
+          name="twitter:description"
+          content="Securely receive clipboard content for BMSCE/BMSIT community"
+        />
+        <meta
+          name="twitter:image"
+          content="https://bmsclipboard.netlify.app/receive-preview.png"
+        />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
-        
+
         {/* Institution Specific Tags */}
         <meta name="institution" content="BMSCE, BMSIT" />
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
-        
+
         {/* Google Ads Script - Only loads when content is retrieved */}
         {content && (
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossOrigin="anonymous"></script>
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
+            crossOrigin="anonymous"
+          ></script>
         )}
       </Helmet>
 
@@ -123,7 +148,6 @@ export default function Receive() {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
           Receive Clipboard
         </h1>
-
         {/* Content for empty state to ensure AdSense compliance */}
         {!content && (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
@@ -139,7 +163,6 @@ export default function Receive() {
             </ul>
           </div>
         )}
-
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <div className="mb-6">
@@ -190,27 +213,28 @@ export default function Receive() {
             </button>
           </div>
         </form>
-
         {error && (
           <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400">
             {error}
           </div>
         )}
-
         {/* AdSense Ad Unit - Only shows when content is retrieved */}
+        {/* // Only show ads when content is retrieved */}
         {content && (
           <div className="my-8">
-            <p className="text-xs text-gray-500 text-center mb-1">Advertisement</p>
-            <ins className="adsbygoogle"
-              style={{ display: 'block' }}
+            <p className="text-xs text-gray-500 text-center mb-1">
+              Advertisement
+            </p>
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
               data-ad-client="ca-pub-9460974170228372"
-              data-ad-slot="1101018584" // Replace with your actual ad slot ID
+              data-ad-slot="1101018584"
               data-ad-format="auto"
               data-full-width-responsive="true"
             ></ins>
           </div>
         )}
-
         {content && (
           <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">

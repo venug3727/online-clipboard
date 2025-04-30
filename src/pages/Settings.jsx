@@ -3,32 +3,32 @@ import { Moon, Clock, CreditCard } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { Helmet } from "react-helmet";
 
-const AdSenseAd = ({ slotId }) => {
-  useEffect(() => {
-    try {
-      // Only push if adsbygoogle is loaded and this ad hasn't been pushed
-      if (window.adsbygoogle && !window.adsbygoogle.loaded) {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
-    } catch (e) {
-      console.error("AdSense error:", e);
-    }
-  }, []);
+// const AdSenseAd = ({ slotId }) => {
+//   useEffect(() => {
+//     try {
+//       // Only push if adsbygoogle is loaded and this ad hasn't been pushed
+//       if (window.adsbygoogle && !window.adsbygoogle.loaded) {
+//         (window.adsbygoogle = window.adsbygoogle || []).push({});
+//       }
+//     } catch (e) {
+//       console.error("AdSense error:", e);
+//     }
+//   }, []);
 
-  return (
-    <div className="mb-8 text-center">
-      <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
-      <ins
-        className="adsbygoogle"
-        style={{ display: "block" }}
-        data-ad-client="ca-pub-9460974170228372"
-        data-ad-slot={slotId}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-    </div>
-  );
-};
+//   return (
+//     <div className="mb-8 text-center">
+//       <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
+//       <ins
+//         className="adsbygoogle"
+//         style={{ display: "block" }}
+//         data-ad-client="ca-pub-9460974170228372"
+//         data-ad-slot={slotId}
+//         data-ad-format="auto"
+//         data-full-width-responsive="true"
+//       ></ins>
+//     </div>
+//   );
+// };
 
 export default function Settings() {
   const { darkMode, toggleDarkMode } = useTheme();
@@ -37,12 +37,13 @@ export default function Settings() {
 
   // Manually load AdSense script without React Helmet
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372';
+    const script = document.createElement("script");
+    script.src =
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372";
     script.async = true;
-    script.crossOrigin = 'anonymous';
+    script.crossOrigin = "anonymous";
     document.head.appendChild(script);
-    
+
     return () => {
       document.head.removeChild(script);
     };
@@ -67,36 +68,57 @@ export default function Settings() {
         <meta name="robots" content="index, follow" />
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
-        
+
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard Settings" />
-        <meta itemProp="description" content="Customize your clipboard experience for BMSCE/BMSIT students" />
-        <meta itemProp="image" content="https://bmsclipboard.netlify.app/settings-preview.png" />
-        
+        <meta
+          itemProp="description"
+          content="Customize your clipboard experience for BMSCE/BMSIT students"
+        />
+        <meta
+          itemProp="image"
+          content="https://bmsclipboard.netlify.app/settings-preview.png"
+        />
+
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.netlify.app/settings" />
+        <meta
+          property="og:url"
+          content="https://bmsclipboard.netlify.app/settings"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard Settings" />
-        <meta property="og:description" content="Customize your clipboard settings for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.netlify.app/settings-preview.png" />
+        <meta
+          property="og:description"
+          content="Customize your clipboard settings for BMSCE/BMSIT community"
+        />
+        <meta
+          property="og:image"
+          content="https://bmsclipboard.netlify.app/settings-preview.png"
+        />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
-        
+
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard Settings" />
-        <meta name="twitter:description" content="Customize your clipboard settings for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/settings-preview.png" />
+        <meta
+          name="twitter:description"
+          content="Customize your clipboard settings for BMSCE/BMSIT community"
+        />
+        <meta
+          name="twitter:image"
+          content="https://bmsclipboard.netlify.app/settings-preview.png"
+        />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
-        
+
         {/* Institution Specific Tags */}
         <meta name="institution" content="BMSCE, BMSIT" />
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
       </Helmet>
 
-      <div className="max-w-2xl mx-auto py-8">
+      <div className="max-w-2xl h-screen mx-auto py-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
           Settings
         </h1>
@@ -152,9 +174,9 @@ export default function Settings() {
           </div>
 
           {/* AdSense Ad Unit */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+          {/* <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <AdSenseAd slotId="1101018584" />
-          </div>
+          </div> */}
         </div>
       </div>
     </>

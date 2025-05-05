@@ -36,18 +36,18 @@ export default function Settings() {
   const [isProUser, setIsProUser] = useState(false);
 
   // Manually load AdSense script without React Helmet
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src =
-      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372";
-    script.async = true;
-    script.crossOrigin = "anonymous";
-    document.head.appendChild(script);
+  // useEffect(() => {
+  //   const script = document.createElement("script");
+  //   script.src =
+  //     "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372";
+  //   script.async = true;
+  //   script.crossOrigin = "anonymous";
+  //   document.head.appendChild(script);
 
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
+  //   return () => {
+  //     document.head.removeChild(script);
+  //   };
+  // }, []);
 
   return (
     <>

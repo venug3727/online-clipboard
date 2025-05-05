@@ -55,7 +55,9 @@ export default function CustomUrl() {
       try {
         new URL(originalUrl);
       } catch {
-        throw new Error("Please enter a valid URL (include http:// or https://)");
+        throw new Error(
+          "Please enter a valid URL (include http:// or https://)"
+        );
       }
 
       // Validate custom path if provided
@@ -98,31 +100,33 @@ export default function CustomUrl() {
 
   useEffect(() => {
     const path = window.location.pathname;
-    
+
     // Skip if on homepage or custom-url page
-    if (path === '/' || path.startsWith('/custom-url')) return;
+    if (path === "/" || path.startsWith("/custom-url")) return;
 
     const shortPath = path.substring(1); // Remove leading "/"
-    
+
     // Call your backend API
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`, {
-      redirect: 'manual' // Important for handling redirects
+      redirect: "manual", // Important for handling redirects
     })
-    .then(response => {
-      if (response.type === 'opaqueredirect') {
-        // For CORS reasons, reconstruct the redirect URL
-        window.location.href = `${import.meta.env.VITE_API_BASE_URL}/api/urls/${shortPath}`;
-      } else if (response.ok) {
-        return response.json().then(data => {
-          window.location.href = data.original_url;
-        });
-      } else {
-        console.error('Short URL not found');
-      }
-    })
-    .catch(error => {
-      console.error('Redirect failed:', error);
-    });
+      .then((response) => {
+        if (response.type === "opaqueredirect") {
+          // For CORS reasons, reconstruct the redirect URL
+          window.location.href = `${
+            import.meta.env.VITE_API_BASE_URL
+          }/api/urls/${shortPath}`;
+        } else if (response.ok) {
+          return response.json().then((data) => {
+            window.location.href = data.original_url;
+          });
+        } else {
+          console.error("Short URL not found");
+        }
+      })
+      .catch((error) => {
+        console.error("Redirect failed:", error);
+      });
   }, []);
 
   const copyToClipboard = () => {
@@ -151,36 +155,57 @@ export default function CustomUrl() {
         <meta name="robots" content="index, follow" />
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
-        
+
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard URL Shortener" />
-        <meta itemProp="description" content="Secure URL shortener for BMSCE/BMSIT students and faculty" />
-        <meta itemProp="image" content="https://bmsclipboard.netlify.app/logo.png" />
-        
+        <meta
+          itemProp="description"
+          content="Secure URL shortener for BMSCE/BMSIT students and faculty"
+        />
+        <meta
+          itemProp="image"
+          content="https://bmsclipboard.netlify.app/logo.png"
+        />
+
         {/* Facebook Meta Tags */}
-        <meta property="og:url" content="https://bmsclipboard.netlify.app/custom-url" />
+        <meta
+          property="og:url"
+          content="https://bmsclipboard.netlify.app/custom-url"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard URL Shortener" />
-        <meta property="og:description" content="Create custom short URLs for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.netlify.app/url-shortener-preview.png" />
+        <meta
+          property="og:description"
+          content="Create custom short URLs for BMSCE/BMSIT community"
+        />
+        <meta
+          property="og:image"
+          content="https://bmsclipboard.netlify.app/url-shortener-preview.png"
+        />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
-        
+
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard URL Shortener" />
-        <meta name="twitter:description" content="Create custom short URLs for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/url-shortener-preview.png" />
+        <meta
+          name="twitter:description"
+          content="Create custom short URLs for BMSCE/BMSIT community"
+        />
+        <meta
+          name="twitter:image"
+          content="https://bmsclipboard.netlify.app/url-shortener-preview.png"
+        />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
-        
+
         {/* Institution Specific Tags */}
         <meta name="institution" content="BMSCE, BMSIT" />
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
-        
+
         {/* Google Ads Script */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
+        {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script> */}
       </Helmet>
 
       <div className="text-center mb-10">
@@ -199,15 +224,21 @@ export default function CustomUrl() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <h3 className="font-medium text-gray-900 dark:text-white mb-2">Enhanced Branding</h3>
+            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+              Enhanced Branding
+            </h3>
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              Custom short URLs with your BMSCE/BMSIT identity create a more professional appearance and increase trust.
+              Custom short URLs with your BMSCE/BMSIT identity create a more
+              professional appearance and increase trust.
             </p>
           </div>
           <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <h3 className="font-medium text-gray-900 dark:text-white mb-2">Better Tracking</h3>
+            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+              Better Tracking
+            </h3>
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              Create separate links for different channels to analyze which platforms generate the most engagement.
+              Create separate links for different channels to analyze which
+              platforms generate the most engagement.
             </p>
           </div>
         </div>
@@ -296,15 +327,23 @@ export default function CustomUrl() {
         <ul className="space-y-2 text-gray-700 dark:text-gray-300">
           <li className="flex items-start">
             <span className="inline-block w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2 mr-2"></span>
-            <span>Keep custom paths short but meaningful (ex: "bmsit-exam" or "bmsce-lab")</span>
+            <span>
+              Keep custom paths short but meaningful (ex: "bmsit-exam" or
+              "bmsce-lab")
+            </span>
           </li>
           <li className="flex items-start">
             <span className="inline-block w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2 mr-2"></span>
-            <span>Use consistent naming conventions for departmental links</span>
+            <span>
+              Use consistent naming conventions for departmental links
+            </span>
           </li>
           <li className="flex items-start">
             <span className="inline-block w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2 mr-2"></span>
-            <span>For printed materials, use easy-to-type paths (avoid similar-looking characters)</span>
+            <span>
+              For printed materials, use easy-to-type paths (avoid
+              similar-looking characters)
+            </span>
           </li>
         </ul>
       </div>
@@ -315,7 +354,7 @@ export default function CustomUrl() {
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Your Short URL
             </h2>
-            
+
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg mb-6">
               <div className="flex items-center overflow-hidden">
                 <ExternalLink className="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 flex-shrink-0" />
@@ -351,7 +390,11 @@ export default function CustomUrl() {
                   size={160}
                   level="H"
                   bgColor="transparent"
-                  fgColor={document.documentElement.classList.contains('dark') ? '#000' : '#000'}
+                  fgColor={
+                    document.documentElement.classList.contains("dark")
+                      ? "#000"
+                      : "#000"
+                  }
                   className="mx-auto"
                   id="qr-code-svg"
                 />
@@ -364,18 +407,20 @@ export default function CustomUrl() {
                     const canvas = document.createElement("canvas");
                     const ctx = canvas.getContext("2d");
                     const img = new Image();
-                    
+
                     img.onload = () => {
                       canvas.width = img.width;
                       canvas.height = img.height;
                       ctx.drawImage(img, 0, 0);
                       const pngFile = canvas.toDataURL("image/png");
                       const downloadLink = document.createElement("a");
-                      downloadLink.download = `clipvault-qr-${customPath || "link"}.png`;
+                      downloadLink.download = `clipvault-qr-${
+                        customPath || "link"
+                      }.png`;
                       downloadLink.href = pngFile;
                       downloadLink.click();
                     };
-                    
+
                     img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
                   }}
                   className="text-sm px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
@@ -401,21 +446,30 @@ export default function CustomUrl() {
         </h2>
         <div className="space-y-4">
           <div>
-            <h3 className="font-medium text-gray-900 dark:text-white">Event Promotion</h3>
+            <h3 className="font-medium text-gray-900 dark:text-white">
+              Event Promotion
+            </h3>
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              Create memorable links for campus events, workshops, and seminars to share on posters and digital announcements.
+              Create memorable links for campus events, workshops, and seminars
+              to share on posters and digital announcements.
             </p>
           </div>
           <div>
-            <h3 className="font-medium text-gray-900 dark:text-white">Department Resources</h3>
+            <h3 className="font-medium text-gray-900 dark:text-white">
+              Department Resources
+            </h3>
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              Share course materials, lecture notes, and reference documents with clean, easy-to-remember links.
+              Share course materials, lecture notes, and reference documents
+              with clean, easy-to-remember links.
             </p>
           </div>
           <div>
-            <h3 className="font-medium text-gray-900 dark:text-white">Club Activities</h3>
+            <h3 className="font-medium text-gray-900 dark:text-white">
+              Club Activities
+            </h3>
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              Distribute registration forms and information for technical and cultural club activities across campus.
+              Distribute registration forms and information for technical and
+              cultural club activities across campus.
             </p>
           </div>
         </div>

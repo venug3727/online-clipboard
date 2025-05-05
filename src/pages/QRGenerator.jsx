@@ -129,13 +129,13 @@ export default function QRGenerator() {
         <meta name="organization" content="BMS Educational Trust" />
 
         {/* Google Ads Script - Only loads when there's content */}
-        {qrValue && qrValue !== "https://bmsclipboard.netlify.app" && (
+        {/* {qrValue && qrValue !== "https://bmsclipboard.netlify.app" && (
           <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
             crossOrigin="anonymous"
           ></script>
-        )}
+        )} */}
       </Helmet>
 
       <div className="max-w-3xl mx-auto px-4 py-8">

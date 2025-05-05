@@ -143,13 +143,13 @@ export default function Send() {
         <meta name="organization" content="BMS Educational Trust" />
 
         {/* Google Ads Script - Only loads when code is generated */}
-        {generatedCode && (
+        {/* {generatedCode && (
           <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
             crossOrigin="anonymous"
           ></script>
-        )}
+        )} */}
       </Helmet>
 
       <div className="max-w-2xl mx-auto px-4 py-8">

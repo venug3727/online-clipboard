@@ -499,6 +499,22 @@ export default function FileSharing() {
         </div>
 
         {/* AdSense Ad - Only shows when content exists */}
+        {/* {(shareLinks.length > 0 || receivedFile) && (
+          <div className="my-8">
+            <p className="text-xs text-gray-500 text-center mb-1">
+              Advertisement
+            </p>
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-9460974170228372"
+              data-ad-slot="1101018584"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            ></ins>
+          </div>
+        )} */}
+
         {(shareLinks.length > 0 || receivedFile) && (
           <div className="my-8">
             <p className="text-xs text-gray-500 text-center mb-1">

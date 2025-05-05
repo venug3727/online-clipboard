@@ -48,7 +48,6 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Initialize AdSense ads after component mounts
-  
 
   return (
     <>
@@ -69,36 +68,54 @@ export default function Home() {
         <meta name="robots" content="index, follow" />
         <meta name="revisit-after" content="7 days" />
         <meta name="rating" content="general" />
-        
+
         {/* Google / Search Engine Tags */}
         <meta itemProp="name" content="BMSClipboard" />
-        <meta itemProp="description" content="Secure clipboard sharing for BMSCE/BMSIT students and faculty" />
-        <meta itemProp="image" content="https://bmsclipboard.netlify.app/logo.png" />
-        
+        <meta
+          itemProp="description"
+          content="Secure clipboard sharing for BMSCE/BMSIT students and faculty"
+        />
+        <meta
+          itemProp="image"
+          content="https://bmsclipboard.netlify.app/logo.png"
+        />
+
         {/* Facebook Meta Tags */}
         <meta property="og:url" content="https://bmsclipboard.netlify.app" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard" />
-        <meta property="og:description" content="Secure clipboard sharing for BMSCE/BMSIT community" />
-        <meta property="og:image" content="https://bmsclipboard.netlify.app/logo.png" />
+        <meta
+          property="og:description"
+          content="Secure clipboard sharing for BMSCE/BMSIT community"
+        />
+        <meta
+          property="og:image"
+          content="https://bmsclipboard.netlify.app/logo.png"
+        />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
-        
+
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BMSClipboard" />
-        <meta name="twitter:description" content="Secure clipboard sharing for BMSCE/BMSIT community" />
-        <meta name="twitter:image" content="https://bmsclipboard.netlify.app/logo.png" />
+        <meta
+          name="twitter:description"
+          content="Secure clipboard sharing for BMSCE/BMSIT community"
+        />
+        <meta
+          name="twitter:image"
+          content="https://bmsclipboard.netlify.app/logo.png"
+        />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
-        
+
         {/* Institution Specific Tags */}
         <meta name="institution" content="BMSCE, BMSIT" />
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
-        
+
         {/* Google Ads Script */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script>
+        {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372" crossorigin="anonymous"></script> */}
       </Helmet>
 
       <div className="flex min-h-screen">
@@ -198,8 +215,9 @@ export default function Home() {
                     Campus-Specific Security
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Designed specifically for BMSCE and BMSIT campus needs, our clipboard sharing
-                    tool prioritizes the security and privacy requirements of academic environments.
+                    Designed specifically for BMSCE and BMSIT campus needs, our
+                    clipboard sharing tool prioritizes the security and privacy
+                    requirements of academic environments.
                   </p>
                 </div>
                 <div className="p-6 glass rounded-xl">
@@ -207,8 +225,9 @@ export default function Home() {
                     Cross-Platform Compatibility
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Seamlessly share content between any devices - laptops, tablets, and smartphones
-                    regardless of operating system or platform.
+                    Seamlessly share content between any devices - laptops,
+                    tablets, and smartphones regardless of operating system or
+                    platform.
                   </p>
                 </div>
               </div>
@@ -219,10 +238,13 @@ export default function Home() {
 
             {/* Footer content to add more value */}
             <div className="mt-12 text-center text-sm text-gray-500">
-              <p>© {new Date().getFullYear()} BMSClipboard. All rights reserved.</p>
+              <p>
+                © {new Date().getFullYear()} BMSClipboard. All rights reserved.
+              </p>
               <p className="mt-2">
-                A secure clipboard sharing solution for BMS College of Engineering and
-                BMS Institute of Technology students and faculty.
+                A secure clipboard sharing solution for BMS College of
+                Engineering and BMS Institute of Technology students and
+                faculty.
               </p>
             </div>
           </div>

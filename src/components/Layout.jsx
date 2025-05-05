@@ -15,6 +15,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { Helmet } from "react-helmet";
 import { useTheme } from "../context/ThemeContext";
 
 export default function Layout({ children }) {
@@ -35,6 +36,13 @@ export default function Layout({ children }) {
     <div
       className={`min-h-screen ${darkMode ? "dark bg-gray-900" : "bg-gray-50"}`}
     >
+      <Helmet>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
+          crossOrigin="anonymous"
+        ></script>
+      </Helmet>
       {/* Mobile Menu Toggle Button */}
       <button
         className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-lg"
@@ -79,7 +87,6 @@ export default function Layout({ children }) {
           {[
             { to: "/send", icon: Send, label: "Send Clipboard" },
             { to: "/receive", icon: Download, label: "Receive Clipboard" },
-            
           ].map(({ to, icon: Icon, label }) => (
             <Link
               key={to}
@@ -101,7 +108,6 @@ export default function Layout({ children }) {
           </h3>
 
           {[
-            
             { to: "/custom-url", icon: LinkIcon, label: "Custom URLs" },
             { to: "/file-sharing", icon: FileText, label: "File Sharing" },
             { to: "/qr-generator", icon: QrCode, label: "QR Generator" },
@@ -191,7 +197,6 @@ export default function Layout({ children }) {
         <main className="pt-14 pb-16 px-4 sm:px-5 lg:px-6">{children}</main>
 
         {/* Mobile Bottom Navigation */}
-        
       </div>
     </div>
   );

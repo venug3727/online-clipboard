@@ -22,23 +22,7 @@ export default function FileSharing() {
   const [codeInput, setCodeInput] = useState("");
   const [receivedFile, setReceivedFile] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
-  const [adLoaded, setAdLoaded] = useState(false);
   const [notifications, setNotifications] = useState([]);
-
-  // Load ads when component mounts and when content is available
-  useEffect(() => {
-    if (
-      (files.length > 0 || shareLinks.length > 0 || receivedFile) &&
-      !adLoaded
-    ) {
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        setAdLoaded(true);
-      } catch (err) {
-        console.error("AdSense error:", err);
-      }
-    }
-  }, [files, shareLinks, receivedFile, adLoaded]);
 
   // Auto-remove notifications after 5 seconds
   useEffect(() => {
@@ -58,7 +42,6 @@ export default function FileSharing() {
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     if (selectedFiles.some((file) => file.size > 100 * 1024 * 1024)) {
-      // 100MB limit
       setError("File size exceeds 100MB limit");
       return;
     }
@@ -280,83 +263,19 @@ export default function FileSharing() {
   return (
     <>
       <Helmet>
-        {/* Primary Meta Tags */}
         <title>BMSClipboard | Secure File Sharing for BMSCE/BMSIT</title>
-        <meta name="application-name" content="BMSClipboard" />
-        <meta name="apple-mobile-web-app-title" content="BMSClipboard" />
         <meta
           name="description"
           content="Securely share files with BMSCE and BMSIT students using BMSClipboard's encrypted file sharing platform."
         />
         <meta
           name="keywords"
-          content="BMSClipboard, BMSCE, BMSIT, file sharing, secure file transfer, BMS College of Engineering, BMS Institute of Technology, encrypted file sharing, temporary file storage"
+          content="BMSClipboard, BMSCE, BMSIT, file sharing, secure file transfer"
         />
-        <meta name="author" content="BMS Development Team" />
-        <meta name="robots" content="index, follow" />
-        <meta name="revisit-after" content="7 days" />
-        <meta name="rating" content="general" />
-
-        {/* Google / Search Engine Tags */}
-        <meta itemProp="name" content="BMSClipboard File Sharing" />
-        <meta
-          itemProp="description"
-          content="Secure file sharing platform for BMSCE/BMSIT students and faculty"
-        />
-        <meta
-          itemProp="image"
-          content="https://bmsclipboard.netlify.app/file-sharing-preview.png"
-        />
-
-        {/* Facebook Meta Tags */}
-        <meta
-          property="og:url"
-          content="https://bmsclipboard.netlify.app/file-sharing"
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="BMSClipboard File Sharing" />
-        <meta
-          property="og:description"
-          content="Secure file sharing for BMSCE/BMSIT community"
-        />
-        <meta
-          property="og:image"
-          content="https://bmsclipboard.netlify.app/file-sharing-preview.png"
-        />
-        <meta property="og:site_name" content="BMSClipboard" />
-        <meta property="og:locale" content="en_US" />
-
-        {/* Twitter Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="BMSClipboard File Sharing" />
-        <meta
-          name="twitter:description"
-          content="Secure file sharing for BMSCE/BMSIT community"
-        />
-        <meta
-          name="twitter:image"
-          content="https://bmsclipboard.netlify.app/file-sharing-preview.png"
-        />
-        <meta name="twitter:site" content="@BMSClipboard" />
-        <meta name="twitter:creator" content="@BMSClipboard" />
-
-        {/* Institution Specific Tags */}
-        <meta name="institution" content="BMSCE, BMSIT" />
-        <meta name="campus" content="Bangalore" />
-        <meta name="organization" content="BMS Educational Trust" />
-
-        {/* Google Ads Script - Only loads when there's content */}
-        {(files.length > 0 || shareLinks.length > 0 || receivedFile) && (
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
-            crossOrigin="anonymous"
-          ></script>
-        )}
       </Helmet>
 
       <div className="max-w-3xl mx-auto px-4 py-8 relative">
-        {/* Notification Center */}
+        {/* Notifications */}
         <div className="fixed top-4 right-4 z-50 w-80 space-y-2">
           <AnimatePresence>
             {notifications.map((notification) => (
@@ -391,10 +310,12 @@ export default function FileSharing() {
             ))}
           </AnimatePresence>
         </div>
+
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           File Sharing
         </h1>
-        {/* Content for empty state to ensure AdSense compliance */}
+
+        {/* Empty state with educational content */}
         {!files.length && !shareLinks.length && !receivedFile && (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -418,12 +339,15 @@ export default function FileSharing() {
             </ul>
           </div>
         )}
+
         {error && (
           <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 flex items-center">
             <XCircle className="h-5 w-5 mr-2" />
             {error}
           </div>
         )}
+
+        {/* Upload Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Upload Files
@@ -480,7 +404,6 @@ export default function FileSharing() {
                 </button>
               </div>
 
-              {/* Upload Progress Bar */}
               {isUploading && (
                 <div className="mt-4">
                   <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-1">
@@ -517,6 +440,8 @@ export default function FileSharing() {
             </div>
           </form>
         </div>
+
+        {/* Access Shared File Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Access Shared File
@@ -572,9 +497,9 @@ export default function FileSharing() {
             </button>
           </div>
         </div>
-        {/* AdSense Ad Unit - Only shows when there's content */}
-        {/* // Only show ads when there's actual content */}
-        {(files.length > 0 || shareLinks.length > 0 || receivedFile) && (
+
+        {/* AdSense Ad - Only shows when content exists */}
+        {(shareLinks.length > 0 || receivedFile) && (
           <div className="my-8">
             <p className="text-xs text-gray-500 text-center mb-1">
               Advertisement
@@ -589,7 +514,11 @@ export default function FileSharing() {
             ></ins>
           </div>
         )}
+
+        {/* Received File Preview */}
         {renderFilePreview()}
+
+        {/* Shared Files List */}
         {shareLinks.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mt-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">

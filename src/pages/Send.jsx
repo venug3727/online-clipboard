@@ -182,23 +182,6 @@ export default function Send() {
               placeholder="Paste your content here..."
               className="w-full h-40 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
-
-            <div className="mt-4 flex items-center gap-4">
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="flex items-center px-4 py-2 text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
-              >
-                <Upload className="h-4 w-4 mr-2" />
-                Upload File
-              </button>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileUpload}
-                className="hidden"
-                accept="text/*,image/*"
-              />
-            </div>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <label className="flex items-center space-x-3 mb-6">

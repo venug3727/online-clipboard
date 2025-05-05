@@ -193,7 +193,7 @@ export default function QRGenerator() {
         </div>
         {/* AdSense Ad Unit - Only shows when QR code is generated */}
         {/* // Only show ads when QR code is generated (not default) */}
-        {qrValue && qrValue !== "https://bmsclipboard.netlify.app" && (
+        {inputText && qrValue !== "https://bmsclipboard.netlify.app" && (
           <div className="my-8">
             <p className="text-xs text-gray-500 text-center mb-1">
               Advertisement

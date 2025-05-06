@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { QrCode, Download, Copy } from "lucide-react";
 import QRCode from "react-qr-code";
 import { Helmet } from "react-helmet";
-
+import AdSenseAd from "../components/AdSenseAd";
 export default function QRGenerator() {
   const [inputText, setInputText] = useState("");
   const [qrValue, setQrValue] = useState("https://bmsclipboard.netlify.app");
@@ -63,85 +63,48 @@ export default function QRGenerator() {
   return (
     <>
       <Helmet>
-        {/* Primary Meta Tags */}
-        <title>BMSClipboard | QR Code Generator for BMSCE/BMSIT</title>
-        <meta name="application-name" content="BMSClipboard" />
-        <meta name="apple-mobile-web-app-title" content="BMSClipboard" />
+        <title>Free QR Code Generator | ClipVault</title>
         <meta
           name="description"
-          content="Generate QR codes instantly for BMSCE and BMSIT students with BMSClipboard's secure QR code generator."
+          content="Create custom QR codes for URLs, contact info, WiFi credentials, and more. No registration required."
         />
-        <meta
-          name="keywords"
-          content="BMSClipboard, BMSCE, BMSIT, QR code generator, BMS College of Engineering, BMS Institute of Technology, secure QR codes, quick sharing"
-        />
-        <meta name="author" content="BMS Development Team" />
-        <meta name="robots" content="index, follow" />
-        <meta name="revisit-after" content="7 days" />
-        <meta name="rating" content="general" />
-
-        {/* Google / Search Engine Tags */}
-        <meta itemProp="name" content="BMSClipboard QR Generator" />
-        <meta
-          itemProp="description"
-          content="Secure QR code generator for BMSCE/BMSIT students and faculty"
-        />
-        <meta
-          itemProp="image"
-          content="https://bmsclipboard.netlify.app/qr-generator-preview.png"
-        />
-
-        {/* Facebook Meta Tags */}
-        <meta
-          property="og:url"
-          content="https://bmsclipboard.netlify.app/qr-generator"
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="BMSClipboard QR Generator" />
-        <meta
-          property="og:description"
-          content="Generate QR codes for BMSCE/BMSIT community"
-        />
-        <meta
-          property="og:image"
-          content="https://bmsclipboard.netlify.app/qr-generator-preview.png"
-        />
-        <meta property="og:site_name" content="BMSClipboard" />
-        <meta property="og:locale" content="en_US" />
-
-        {/* Twitter Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="BMSClipboard QR Generator" />
-        <meta
-          name="twitter:description"
-          content="Generate QR codes for BMSCE/BMSIT community"
-        />
-        <meta
-          name="twitter:image"
-          content="https://bmsclipboard.netlify.app/qr-generator-preview.png"
-        />
-        <meta name="twitter:site" content="@BMSClipboard" />
-        <meta name="twitter:creator" content="@BMSClipboard" />
-
-        {/* Institution Specific Tags */}
-        <meta name="institution" content="BMSCE, BMSIT" />
-        <meta name="campus" content="Bangalore" />
-        <meta name="organization" content="BMS Educational Trust" />
-
-        {/* Google Ads Script - Only loads when there's content */}
-        {/* {qrValue && qrValue !== "https://bmsclipboard.netlify.app" && (
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
-            crossOrigin="anonymous"
-          ></script>
-        )} */}
       </Helmet>
 
       <div className="max-w-3xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           QR Code Generator
         </h1>
+
+        {/* Educational Content Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+            What Can You Create QR Codes For?
+          </h2>
+          <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300 text-sm">
+            <li>
+              <strong>Website URLs:</strong> Drive traffic to your site
+            </li>
+            <li>
+              <strong>Contact Cards:</strong> Share your contact info instantly
+            </li>
+            <li>
+              <strong>WiFi Access:</strong> Generate codes for your guest
+              network
+            </li>
+            <li>
+              <strong>Payment Links:</strong> Create QR codes for PayPal, Venmo,
+              etc.
+            </li>
+            <li>
+              <strong>Event Details:</strong> Share event locations and info
+            </li>
+          </ul>
+        </div>
+
+        {/* First Ad Unit */}
+        <AdSenseAd slotId="1101018584" />
+
+        {/* MAIN FORM (keep existing UI) */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
           <form onSubmit={generateQR} className="mb-6">
             <div className="flex gap-3">
@@ -191,33 +154,74 @@ export default function QRGenerator() {
             </div>
           </div>
         </div>
-        {/* AdSense Ad Unit - Only shows when QR code is generated */}
-        {/* // Only show ads when QR code is generated (not default) */}
+
+        {/* Second Ad Unit */}
         {inputText && qrValue !== "https://bmsclipboard.netlify.app" && (
-          <div className="my-8">
-            <p className="text-xs text-gray-500 text-center mb-1">
-              Advertisement
-            </p>
-            <ins
-              className="adsbygoogle"
-              style={{ display: "block" }}
-              data-ad-client="ca-pub-9460974170228372"
-              data-ad-slot="1101018584"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-          </div>
+          <AdSenseAd slotId="7843256991" />
         )}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            How to use
+
+        {/* Advanced Options Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Advanced QR Code Tips
           </h2>
           <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-            <li>Enter any text or URL in the input field</li>
-            <li>Click "Generate" to create your QR code</li>
-            <li>Download the QR code or copy the original text</li>
-            <li>Share the QR code with others for quick access</li>
+            <li>
+              <strong>Error Correction:</strong> Higher levels (like "H" used
+              here) allow the QR code to still work when up to 30% damaged
+            </li>
+            <li>
+              <strong>Custom Colors:</strong> Use contrasting colors for better
+              scan reliability (dark on light or vice versa)
+            </li>
+            <li>
+              <strong>Size Matters:</strong> Larger QR codes are easier to scan
+              from farther away or on mobile devices
+            </li>
           </ul>
+        </div>
+
+        {/* Use Cases Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+            Professional QR Code Uses
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+                Business Cards
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Add a QR code linking to your portfolio, LinkedIn, or contact
+                info.
+              </p>
+            </div>
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+                Restaurant Menus
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Let customers view digital menus by scanning a code at their
+                table.
+              </p>
+            </div>
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+                Product Packaging
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Link to user manuals, warranty info, or product demos.
+              </p>
+            </div>
+            <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+                Event Tickets
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Include unique QR codes for ticket validation and entry.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { motion, AnimatePresence } from "framer-motion";
+import AdSenseAd from "../components/AdSenseAd";
 
 export default function FileSharing() {
   const [files, setFiles] = useState([]);
@@ -263,14 +264,14 @@ export default function FileSharing() {
   return (
     <>
       <Helmet>
-        <title>BMSClipboard | Secure File Sharing for BMSCE/BMSIT</title>
+        <title>Secure File Sharing | ClipVault</title>
         <meta
           name="description"
-          content="Securely share files with BMSCE and BMSIT students using BMSClipboard's encrypted file sharing platform."
+          content="Share files up to 100MB with secure, encrypted links that automatically expire. No registration required."
         />
         <meta
           name="keywords"
-          content="BMSClipboard, BMSCE, BMSIT, file sharing, secure file transfer"
+          content="file sharing, secure transfer, encrypted upload, temporary file storage"
         />
       </Helmet>
 
@@ -315,30 +316,22 @@ export default function FileSharing() {
           File Sharing
         </h1>
 
-        {/* Empty state with educational content */}
-        {!files.length && !shareLinks.length && !receivedFile && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              About BMSClipboard File Sharing
-            </h2>
-            <p className="text-gray-700 dark:text-gray-300 mb-4">
-              Securely share files with BMSCE and BMSIT students and faculty.
-              Our platform provides encrypted temporary file storage with unique
-              access codes.
-            </p>
-            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
-              Features:
-            </h3>
-            <ul className="list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-1">
-              <li>End-to-end encrypted file transfers</li>
-              <li>Auto-expiring links (7 days)</li>
-              <li>4-digit access codes for easy sharing</li>
-              <li>Preview images, PDFs, and text files</li>
-              <li>Built specifically for BMSCE/BMSIT community</li>
-              <li>100MB maximum file size</li>
-            </ul>
-          </div>
-        )}
+        {/* Educational Content Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+            Secure File Sharing Features
+          </h2>
+          <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300 text-sm">
+            <li>100MB maximum file size (all file types supported)</li>
+            <li>Files automatically delete after 7 days</li>
+            <li>4-digit access codes for easy sharing</li>
+            <li>Preview images, PDFs, and text files directly</li>
+            <li>End-to-end encrypted transfers</li>
+          </ul>
+        </div>
+
+        {/* First Ad Unit */}
+        <AdSenseAd slotId="1101018584" />
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 flex items-center">
@@ -374,33 +367,7 @@ export default function FileSharing() {
                   disabled={files.length === 0 || isUploading}
                   className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:bg-gray-400"
                 >
-                  {isUploading ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Uploading...
-                    </>
-                  ) : (
-                    "Upload File"
-                  )}
+                  {isUploading ? "Uploading..." : "Upload File"}
                 </button>
               </div>
 
@@ -411,11 +378,9 @@ export default function FileSharing() {
                     <span>{uploadProgress}%</span>
                   </div>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                    <motion.div
+                    <div
                       className="bg-indigo-600 h-2.5 rounded-full"
-                      initial={{ width: "0%" }}
-                      animate={{ width: `${uploadProgress}%` }}
-                      transition={{ duration: 0.3 }}
+                      style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
                 </div>
@@ -423,25 +388,18 @@ export default function FileSharing() {
 
               {files.length > 0 && !isUploading && (
                 <div className="mt-3">
-                  <ul className="space-y-1">
-                    {files.map((file, index) => (
-                      <li
-                        key={index}
-                        className="flex items-center text-sm text-gray-700 dark:text-gray-300"
-                      >
-                        <File className="h-4 w-4 mr-2" />
-                        {file.name} ({(file.size / (1024 * 1024)).toFixed(2)}{" "}
-                        MB)
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 flex items-center">
+                    <File className="h-4 w-4 mr-2" />
+                    {files[0].name} (
+                    {(files[0].size / (1024 * 1024)).toFixed(2)} MB)
+                  </p>
                 </div>
               )}
             </div>
           </form>
         </div>
 
-        {/* Access Shared File Section */}
+        {/* Access Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Access Shared File
@@ -457,86 +415,30 @@ export default function FileSharing() {
               }}
               placeholder="Enter 4-digit code"
               maxLength="4"
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white flex-1"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
             />
             <button
               onClick={fetchFileByCode}
               disabled={isFetching || codeInput.length !== 4}
               className="flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg disabled:bg-gray-400"
             >
-              {isFetching ? (
-                <>
-                  <svg
-                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Loading...
-                </>
-              ) : (
-                <>
-                  <Eye className="h-5 w-5 mr-2" />
-                  View
-                </>
-              )}
+              <Eye className="h-5 w-5 mr-2" />
+              {isFetching ? "Loading..." : "View"}
             </button>
           </div>
         </div>
 
-        {/* AdSense Ad - Only shows when content exists */}
-        {/* {(shareLinks.length > 0 || receivedFile) && (
-          <div className="my-8">
-            <p className="text-xs text-gray-500 text-center mb-1">
-              Advertisement
-            </p>
-            <ins
-              className="adsbygoogle"
-              style={{ display: "block" }}
-              data-ad-client="ca-pub-9460974170228372"
-              data-ad-slot="1101018584"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-          </div>
-        )} */}
-
+        {/* Second Ad Unit */}
         {(shareLinks.length > 0 || receivedFile) && (
-          <div className="my-8">
-            <p className="text-xs text-gray-500 text-center mb-1">
-              Advertisement
-            </p>
-            <ins
-              className="adsbygoogle"
-              style={{ display: "block" }}
-              data-ad-client="ca-pub-9460974170228372"
-              data-ad-slot="1101018584"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-          </div>
+          <AdSenseAd slotId="7843256991" />
         )}
 
-        {/* Received File Preview */}
+        {/* Received File Section */}
         {renderFilePreview()}
 
         {/* Shared Files List */}
         {shareLinks.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mt-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Your Shared Files
             </h2>
@@ -559,7 +461,6 @@ export default function FileSharing() {
                     <button
                       onClick={() => deleteLink(link.id)}
                       className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
-                      aria-label="Delete"
                     >
                       <Trash2 className="h-5 w-5" />
                     </button>
@@ -574,19 +475,32 @@ export default function FileSharing() {
                     <button
                       onClick={() => copyToClipboard(link.link)}
                       className="p-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
-                      aria-label="Copy link"
                     >
                       <Copy className="h-4 w-4" />
                     </button>
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                    Expires: {link.expires}
-                  </p>
                 </div>
               ))}
             </div>
           </div>
         )}
+
+        {/* Additional Tips Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mt-8">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+            File Sharing Tips
+          </h3>
+          <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300 text-sm">
+            <li>For large files, compress them first for faster uploads</li>
+            <li>
+              Use descriptive filenames to help recipients identify content
+            </li>
+            <li>
+              Share the code through a different channel than the password for
+              security
+            </li>
+          </ul>
+        </div>
       </div>
     </>
   );

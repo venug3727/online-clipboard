@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Search, Lock, Copy, CheckCircle } from "lucide-react";
 import { Helmet } from "react-helmet";
-
+import AdSenseAd from "../components/AdSenseAd";
 export default function Receive() {
   const [code, setCode] = useState("");
   const [decryptionKey, setDecryptionKey] = useState("");
@@ -133,15 +133,6 @@ export default function Receive() {
         <meta name="institution" content="BMSCE, BMSIT" />
         <meta name="campus" content="Bangalore" />
         <meta name="organization" content="BMS Educational Trust" />
-
-        {/* Google Ads Script - Only loads when content is retrieved */}
-        {/* {content && (
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
-            crossOrigin="anonymous"
-          ></script>
-        )} */}
       </Helmet>
 
       <div className="max-w-2xl mx-auto px-4 py-8">
@@ -149,20 +140,19 @@ export default function Receive() {
           Receive Clipboard
         </h1>
         {/* Content for empty state to ensure AdSense compliance */}
-        {!content && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              How to receive content
-            </h2>
-            <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-              <li>Enter the 4-digit code provided by the sender</li>
-              <li>If the content is encrypted, enter the decryption key</li>
-              <li>Click "Retrieve Clipboard" to access the shared content</li>
-              <li>All content is automatically deleted after being viewed</li>
-              <li>For BMSCE/BMSIT students and faculty only</li>
-            </ul>
-          </div>
-        )}
+
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            How to receive content
+          </h2>
+          <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+            <li>Enter the 4-digit code or scan the QR shared with you</li>
+            <li>Password-protected content will prompt for decryption key</li>
+            <li>All content is automatically deleted after first view</li>
+            <li>Works on any device - no app installation required</li>
+          </ul>
+        </div>
+        <AdSenseAd slotId="1101018584" />
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <div className="mb-6">
@@ -177,7 +167,7 @@ export default function Receive() {
                   onChange={(e) =>
                     setCode(e.target.value.replace(/\D/g, "").slice(0, 4))
                   }
-                  placeholder="Enter code"
+                  placeholder="e.g. 1234"
                   className="w-full px-4 py-2 pl-10 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
                 <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
@@ -188,14 +178,14 @@ export default function Receive() {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <div className="flex items-center">
                   <Lock className="h-4 w-4 mr-2" />
-                  Decryption Key (if required)
+                  Decryption Key (if provided)
                 </div>
               </label>
               <input
                 type="password"
                 value={decryptionKey}
                 onChange={(e) => setDecryptionKey(e.target.value)}
-                placeholder="Enter decryption key"
+                placeholder="Enter the password"
                 className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
             </div>
@@ -208,33 +198,16 @@ export default function Receive() {
               {isLoading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
-                "Retrieve Clipboard"
+                "Access Content"
               )}
             </button>
           </div>
         </form>
-        {error && (
-          <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400">
-            {error}
-          </div>
-        )}
-        {/* AdSense Ad Unit - Only shows when content is retrieved */}
-        {/* // Only show ads when content is retrieved */}
-        {content && (
-          <div className="my-8">
-            <p className="text-xs text-gray-500 text-center mb-1">
-              Advertisement
-            </p>
-            <ins
-              className="adsbygoogle"
-              style={{ display: "block" }}
-              data-ad-client="ca-pub-9460974170228372"
-              data-ad-slot="1101018584"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-          </div>
-        )}
+
+        {/* Second Ad Unit */}
+        {content && <AdSenseAd slotId="7843256991" />}
+
+        {/* Content Display Area (unchanged) */}
         {content && (
           <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
@@ -244,7 +217,7 @@ export default function Receive() {
               <div className="flex items-center space-x-2">
                 {content.is_confidential && (
                   <span className="px-2 py-1 text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full">
-                    Confidential
+                    Protected
                   </span>
                 )}
                 <button
@@ -265,12 +238,28 @@ export default function Receive() {
               </pre>
               {content.created_at && (
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  Created: {new Date(content.created_at).toLocaleString()}
+                  Expires: {new Date(content.expires_at).toLocaleString()}
                 </p>
               )}
             </div>
           </div>
         )}
+
+        {/* Additional Help Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mt-8">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+            Having Trouble?
+          </h3>
+          <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300 text-sm">
+            <li>Ensure you entered the correct 4-digit code</li>
+            <li>
+              Password-protected? Verify the sender gave you the right password
+            </li>
+            <li>
+              Links expire after 24 hours - ask sender to regenerate if needed
+            </li>
+          </ul>
+        </div>
       </div>
     </>
   );

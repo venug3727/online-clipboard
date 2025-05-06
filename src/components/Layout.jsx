@@ -48,13 +48,20 @@ export default function Layout({ children }) {
 
   // Load AdSense script properly
   useEffect(() => {
-    if (!document.querySelector('script[src*="adsbygoogle.js"]')) {
-      const script = document.createElement("script");
-      script.src =
-        "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372";
-      script.async = true;
-      script.crossOrigin = "anonymous";
-      document.head.appendChild(script);
+    const loadAdSense = () => {
+      if (!document.querySelector('script[src*="adsbygoogle.js"]')) {
+        const script = document.createElement("script");
+        script.src =
+          "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372";
+        script.async = true;
+        script.crossOrigin = "anonymous";
+        document.head.appendChild(script);
+      }
+    };
+
+    // Only load on production
+    if (process.env.NODE_ENV === "production") {
+      loadAdSense();
     }
   }, []);
 
@@ -70,7 +77,14 @@ export default function Layout({ children }) {
       className={`min-h-screen ${darkMode ? "dark bg-gray-900" : "bg-gray-50"}`}
     >
       <Helmet>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Auto ads - only in production */}
+        {process.env.NODE_ENV === "production" && (
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
+            crossOrigin="anonymous"
+          ></script>
+        )}
       </Helmet>
 
       {/* Mobile Header */}

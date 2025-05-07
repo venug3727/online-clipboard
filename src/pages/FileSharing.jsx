@@ -9,7 +9,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import { motion, AnimatePresence } from "framer-motion";
 import AdSenseAd from "../components/AdSenseAd";
 

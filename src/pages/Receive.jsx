@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Search, Lock, Copy, CheckCircle } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import AdSenseAd from "../components/AdSenseAd";
 export default function Receive() {
   const [code, setCode] = useState("");

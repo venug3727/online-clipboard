@@ -15,7 +15,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import { useTheme } from "../context/ThemeContext";
 
 export default function Layout({ children }) {

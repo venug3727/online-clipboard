@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { QrCode, Download, Copy } from "lucide-react";
 import QRCode from "react-qr-code";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import AdSenseAd from "../components/AdSenseAd";
 export default function QRGenerator() {
   const [inputText, setInputText] = useState("");

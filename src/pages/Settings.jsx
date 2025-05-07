@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Moon, Clock, CreditCard } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "@dr.pogodin/react-helmet";
 
 // const AdSenseAd = ({ slotId }) => {
 //   useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, Copy, CheckCircle, ExternalLink } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import QRCode from "react-qr-code";
 import AdSenseAd from "../components/AdSenseAd";
 // AdSense Ad Component

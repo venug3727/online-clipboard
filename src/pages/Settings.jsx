@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Moon, Clock, CreditCard } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 // const AdSenseAd = ({ slotId }) => {
 //   useEffect(() => {
@@ -77,13 +77,13 @@ export default function Settings() {
         />
         <meta
           itemProp="image"
-          content="https://bmsclipboard.netlify.app/settings-preview.png"
+          content="https://bmsclipboard.vgcs.online/settings-preview.png"
         />
 
         {/* Facebook Meta Tags */}
         <meta
           property="og:url"
-          content="https://bmsclipboard.netlify.app/settings"
+          content="https://bmsclipboard.vgcs.online/settings"
         />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard Settings" />
@@ -93,7 +93,7 @@ export default function Settings() {
         />
         <meta
           property="og:image"
-          content="https://bmsclipboard.netlify.app/settings-preview.png"
+          content="https://bmsclipboard.vgcs.online/settings-preview.png"
         />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
@@ -107,7 +107,7 @@ export default function Settings() {
         />
         <meta
           name="twitter:image"
-          content="https://bmsclipboard.netlify.app/settings-preview.png"
+          content="https://bmsclipboard.vgcs.online/settings-preview.png"
         />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />

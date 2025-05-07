@@ -9,7 +9,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import AdSenseAd from "../components/AdSenseAd";
 
@@ -264,7 +264,7 @@ export default function FileSharing() {
   return (
     <>
       <Helmet>
-        <title>Secure File Sharing | ClipVault</title>
+        <title>Secure File Sharing | BMS Clipboard</title>
         <meta
           name="description"
           content="Share files up to 100MB with secure, encrypted links that automatically expire. No registration required."
@@ -331,7 +331,12 @@ export default function FileSharing() {
         </div>
 
         {/* First Ad Unit */}
-        <AdSenseAd slotId="1101018584" />
+        <div className="c">
+          <h1 className="text-center py-[20px] text-lg font-semibold">
+            Sponsors
+          </h1>
+          <AdSenseAd slotId="1101018584" />
+        </div>
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 flex items-center">
@@ -430,7 +435,12 @@ export default function FileSharing() {
 
         {/* Second Ad Unit */}
         {(shareLinks.length > 0 || receivedFile) && (
-          <AdSenseAd slotId="7843256991" />
+          <div className="c">
+            <h1 className="text-center py-[20px] text-lg font-semibold">
+              Sponsors
+            </h1>
+            <AdSenseAd slotId="7843256991" />
+          </div>
         )}
 
         {/* Received File Section */}

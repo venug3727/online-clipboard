@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { QrCode, Download, Copy } from "lucide-react";
 import QRCode from "react-qr-code";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import AdSenseAd from "../components/AdSenseAd";
 export default function QRGenerator() {
   const [inputText, setInputText] = useState("");
-  const [qrValue, setQrValue] = useState("https://bmsclipboard.netlify.app");
+  const [qrValue, setQrValue] = useState("https://bmsclipboard.vgcs.online");
   const [darkMode, setDarkMode] = useState(false);
   const [adLoaded, setAdLoaded] = useState(false);
   const qrRef = useRef(null);
@@ -14,7 +14,7 @@ export default function QRGenerator() {
   useEffect(() => {
     if (
       qrValue &&
-      qrValue !== "https://bmsclipboard.netlify.app" &&
+      qrValue !== "https://bmsclipboard.vgcs.online" &&
       !adLoaded
     ) {
       try {
@@ -63,7 +63,7 @@ export default function QRGenerator() {
   return (
     <>
       <Helmet>
-        <title>Free QR Code Generator | ClipVault</title>
+        <title>Free QR Code Generator | BMS Clipboard</title>
         <meta
           name="description"
           content="Create custom QR codes for URLs, contact info, WiFi credentials, and more. No registration required."
@@ -102,8 +102,13 @@ export default function QRGenerator() {
         </div>
 
         {/* First Ad Unit */}
-        <AdSenseAd slotId="1101018584" />
 
+        <div className="c">
+          <h1 className="text-center py-[20px] text-lg font-semibold">
+            Sponsors
+          </h1>
+          <AdSenseAd slotId="1101018584" />
+        </div>
         {/* MAIN FORM (keep existing UI) */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
           <form onSubmit={generateQR} className="mb-6">
@@ -156,10 +161,15 @@ export default function QRGenerator() {
         </div>
 
         {/* Second Ad Unit */}
-        {inputText && qrValue !== "https://bmsclipboard.netlify.app" && (
-          <AdSenseAd slotId="7843256991" />
-        )}
 
+        <div className="c">
+          <h1 className="text-center py-[20px] text-lg font-semibold">
+            Sponsors
+          </h1>
+          {inputText && qrValue !== "https://bmsclipboard.vgcs.online" && (
+            <AdSenseAd slotId="7843256991" />
+          )}
+        </div>
         {/* Advanced Options Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">

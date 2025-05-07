@@ -1,23 +1,14 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { Send, Download, Shield, Clock, Zap } from "lucide-react";
 import AdSenseAd from "../components/AdSenseAd";
 
 export default function Home() {
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src =
-      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372";
-    script.async = true;
-    script.crossOrigin = "anonymous";
-    document.head.appendChild(script);
-  }, []);
-
   return (
     <>
       <Helmet>
-        <title>ClipVault | Secure File & Text Sharing</title>
+        <title>BMS Clipboard | Secure File & Text Sharing</title>
         <meta
           name="description"
           content="Transfer files up to 100MB and text snippets between devices with end-to-end encryption. No registration required."
@@ -40,8 +31,12 @@ export default function Home() {
               encryption. Works across all devices with no installation needed.
             </p>
           </div>
-
-          <AdSenseAd slotId="1101018584" className="my-8" />
+          <div className="c">
+            <h1 className="text-center py-[20px] text-lg font-semibold">
+              Sponsors
+            </h1>
+            <AdSenseAd slotId="1101018584" className="my-8" />
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mx-auto mb-16">
             <Link
@@ -137,7 +132,9 @@ export default function Home() {
           </div>
 
           <div className="mt-12 text-center text-sm text-gray-500">
-            <p>© {new Date().getFullYear()} ClipVault. All rights reserved.</p>
+            <p>
+              © {new Date().getFullYear()} BMS Clipboard. All rights reserved.
+            </p>
             <p className="mt-2">
               A free file sharing service for everyone. No account required.
             </p>

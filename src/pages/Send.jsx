@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Upload, Lock, Copy, QrCode } from "lucide-react";
 import QRCode from "react-qr-code";
 import { supabase } from "../lib/supabase";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import AdSenseAd from "../components/AdSenseAd";
 
 export default function Send() {
@@ -103,13 +103,13 @@ export default function Send() {
         />
         <meta
           itemProp="image"
-          content="https://bmsclipboard.netlify.app/send-preview.png"
+          content="https://bmsclipboard.vgcs.online/send-preview.png"
         />
 
         {/* Facebook Meta Tags */}
         <meta
           property="og:url"
-          content="https://bmsclipboard.netlify.app/send"
+          content="https://bmsclipboard.vgcs.online/send"
         />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard Sender" />
@@ -119,7 +119,7 @@ export default function Send() {
         />
         <meta
           property="og:image"
-          content="https://bmsclipboard.netlify.app/send-preview.png"
+          content="https://bmsclipboard.vgcs.online/send-preview.png"
         />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
@@ -133,7 +133,7 @@ export default function Send() {
         />
         <meta
           name="twitter:image"
-          content="https://bmsclipboard.netlify.app/send-preview.png"
+          content="https://bmsclipboard.vgcs.online/send-preview.png"
         />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
@@ -170,7 +170,13 @@ export default function Send() {
             <li>100MB maximum file size (no file type restrictions)</li>
           </ul>
         </div>
-        <AdSenseAd slotId="1101018584" />
+        <div className="c">
+          <h1 className="text-center py-[20px] text-lg font-semibold">
+            Sponsors
+          </h1>
+          <AdSenseAd slotId="1101018584" />
+        </div>
+
         <div className="space-y-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <textarea
@@ -255,7 +261,12 @@ export default function Send() {
         </div>
 
         {/* Second Ad Unit */}
-        {generatedCode && <AdSenseAd slotId="7843256991" />}
+        <div className="c">
+          <h1 className="text-center py-[20px] text-lg font-semibold">
+            Sponsors
+          </h1>
+          {generatedCode && <AdSenseAd slotId="7843256991" />}
+        </div>
 
         {/* Generated Code Section (unchanged) */}
         {generatedCode && (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Search, Lock, Copy, CheckCircle } from "lucide-react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import AdSenseAd from "../components/AdSenseAd";
 export default function Receive() {
   const [code, setCode] = useState("");
@@ -94,13 +94,13 @@ export default function Receive() {
         />
         <meta
           itemProp="image"
-          content="https://bmsclipboard.netlify.app/receive-preview.png"
+          content="https://bmsclipboard.vgcs.online/receive-preview.png"
         />
 
         {/* Facebook Meta Tags */}
         <meta
           property="og:url"
-          content="https://bmsclipboard.netlify.app/receive"
+          content="https://bmsclipboard.vgcs.online/receive"
         />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="BMSClipboard Receiver" />
@@ -110,7 +110,7 @@ export default function Receive() {
         />
         <meta
           property="og:image"
-          content="https://bmsclipboard.netlify.app/receive-preview.png"
+          content="https://bmsclipboard.vgcs.online/receive-preview.png"
         />
         <meta property="og:site_name" content="BMSClipboard" />
         <meta property="og:locale" content="en_US" />
@@ -124,7 +124,7 @@ export default function Receive() {
         />
         <meta
           name="twitter:image"
-          content="https://bmsclipboard.netlify.app/receive-preview.png"
+          content="https://bmsclipboard.vgcs.online/receive-preview.png"
         />
         <meta name="twitter:site" content="@BMSClipboard" />
         <meta name="twitter:creator" content="@BMSClipboard" />
@@ -152,7 +152,13 @@ export default function Receive() {
             <li>Works on any device - no app installation required</li>
           </ul>
         </div>
-        <AdSenseAd slotId="1101018584" />
+        <div className="c">
+          <h1 className="text-center py-[20px] text-lg font-semibold">
+            Sponsors
+          </h1>
+          <AdSenseAd slotId="1101018584" />
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
             <div className="mb-6">

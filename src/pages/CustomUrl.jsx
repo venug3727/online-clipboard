@@ -1,35 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, Copy, CheckCircle, ExternalLink } from "lucide-react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import QRCode from "react-qr-code";
-
+import AdSenseAd from "../components/AdSenseAd";
 // AdSense Ad Component
-const AdSenseAd = ({ slotId }) => {
-  useEffect(() => {
-    try {
-      // Only push if adsbygoogle is loaded and this ad hasn't been pushed
-      if (window.adsbygoogle && !window.adsbygoogle.loaded) {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
-    } catch (e) {
-      console.error("AdSense error:", e);
-    }
-  }, []);
-
-  return (
-    <div className="mb-8 text-center">
-      <p className="text-sm text-gray-500 mb-2">Sponsored Content</p>
-      <ins
-        className="adsbygoogle"
-        style={{ display: "block" }}
-        data-ad-client="ca-pub-9460974170228372"
-        data-ad-slot={slotId}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-    </div>
-  );
-};
 
 export default function CustomUrl() {
   const [originalUrl, setOriginalUrl] = useState("");
@@ -135,10 +109,38 @@ export default function CustomUrl() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const downloadQR = () => {
+    const svg = document.getElementById("qr-code-svg");
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      const pngFile = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.download = `QR_${customPath || "shorturl"}`;
+      downloadLink.href = `${pngFile}`;
+      downloadLink.click();
+    };
+
+    img.src = `data:image/svg+xml;base64,${btoa(
+      unescape(encodeURIComponent(svgData))
+    )}`;
+  };
+
+  // const data = await response.json();
+  // const cleanUrl = `https://clip.vgcs.online/${data.short_url
+  //   .split("/")
+  //   .pop()}`;
+  // setShortUrl(cleanUrl);
   return (
     <>
       <Helmet>
-        <title>Custom URL Shortener | ClipVault</title>
+        <title>Custom URL Shortener | BMS Clipboard</title>
         <meta
           name="description"
           content="Create memorable short links and track clicks. Free custom URL shortener for personal and business use."
@@ -183,7 +185,12 @@ export default function CustomUrl() {
         </div>
 
         {/* First Ad Unit */}
-        <AdSenseAd slotId="1101018584" />
+        <div className="c">
+          <h1 className="text-center py-[20px] text-lg font-semibold">
+            Sponsors
+          </h1>
+          <AdSenseAd slotId="1101018584" />
+        </div>
 
         {/* MAIN FORM (keep existing UI) */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
@@ -215,7 +222,7 @@ export default function CustomUrl() {
               </label>
               <div className="flex">
                 <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
-                  clipvault.link/
+                  clip.vgcs.online/
                 </span>
                 <input
                   id="custom-path"
@@ -259,7 +266,12 @@ export default function CustomUrl() {
         </div>
 
         {/* Second Ad Unit */}
-        {shortUrl && <AdSenseAd slotId="7843256991" />}
+        <div className="c">
+          <h1 className="text-center py-[20px] text-lg font-semibold">
+            Sponsors
+          </h1>
+          {shortUrl && <AdSenseAd slotId="7843256991" />}
+        </div>
 
         {/* RESULT SECTION (unchanged) */}
         {shortUrl && (
@@ -273,12 +285,14 @@ export default function CustomUrl() {
                 <div className="flex items-center overflow-hidden">
                   <ExternalLink className="h-5 w-5 text-indigo-600 dark:text-indigo-400 mr-3 flex-shrink-0" />
                   <a
-                    href={shortUrl}
+                    href={`https://clip.vgcs.online/${shortUrl
+                      .split("/")
+                      .pop()}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-indigo-600 dark:text-indigo-400 hover:underline truncate"
                   >
-                    {shortUrl}
+                    {`https://clip.vgcs.online/${shortUrl.split("/").pop()}`}
                   </a>
                 </div>
                 <button

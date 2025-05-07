@@ -15,7 +15,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useTheme } from "../context/ThemeContext";
 
 export default function Layout({ children }) {
@@ -77,14 +77,15 @@ export default function Layout({ children }) {
       className={`min-h-screen ${darkMode ? "dark bg-gray-900" : "bg-gray-50"}`}
     >
       <Helmet>
-        {/* Auto ads - only in production */}
-        {process.env.NODE_ENV === "production" && (
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
-            crossOrigin="anonymous"
-          ></script>
-        )}
+        <title>Secure File Sharing | BMS Clipboard</title>
+        <meta
+          name="description"
+          content="Share files up to 100MB with secure, encrypted links that automatically expire. No registration required."
+        />
+        <meta
+          name="keywords"
+          content="file sharing, secure transfer, encrypted upload, temporary file storage"
+        />
       </Helmet>
 
       {/* Mobile Header */}

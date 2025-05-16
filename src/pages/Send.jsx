@@ -253,7 +253,7 @@ export default function Send() {
               ) : (
                 <>
                   <QrCode className="h-5 w-5 mr-2" />
-                  Generate Secure Link
+                  Generate Code
                 </>
               )}
             </button>

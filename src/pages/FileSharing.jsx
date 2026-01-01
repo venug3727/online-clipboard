@@ -8,10 +8,17 @@ import {
   Eye,
   CheckCircle,
   XCircle,
+  FileImage,
+  FileText,
+  FileVideo,
+  FileAudio,
+  FileArchive,
+  Search,
+  AlertCircle,
+  Cloud,
 } from "lucide-react";
 import { Helmet } from "@dr.pogodin/react-helmet";
 import { motion, AnimatePresence } from "framer-motion";
-import AdSenseAd from "../components/AdSenseAd";
 
 export default function FileSharing() {
   const [files, setFiles] = useState([]);
@@ -20,10 +27,13 @@ export default function FileSharing() {
   const [shareLinks, setShareLinks] = useState([]);
   const fileInputRef = useRef(null);
   const [error, setError] = useState("");
-  const [codeInput, setCodeInput] = useState("");
+  const [codeInput, setCodeInput] = useState(["", "", "", ""]);
   const [receivedFile, setReceivedFile] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [copied, setCopied] = useState(null);
+  const codeInputRefs = [useRef(), useRef(), useRef(), useRef()];
 
   // Auto-remove notifications after 5 seconds
   useEffect(() => {
@@ -40,8 +50,37 @@ export default function FileSharing() {
     setNotifications([...notifications, { id, message, type }]);
   };
 
+  const getFileIcon = (contentType) => {
+    if (contentType?.startsWith("image/")) return FileImage;
+    if (contentType?.startsWith("video/")) return FileVideo;
+    if (contentType?.startsWith("audio/")) return FileAudio;
+    if (contentType?.includes("zip") || contentType?.includes("rar") || contentType?.includes("archive")) return FileArchive;
+    return FileText;
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    handleFilesSelected(droppedFiles);
+  };
+
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
+    handleFilesSelected(selectedFiles);
+  };
+
+  const handleFilesSelected = (selectedFiles) => {
     if (selectedFiles.some((file) => file.size > 100 * 1024 * 1024)) {
       setError("File size exceeds 100MB limit");
       return;
@@ -51,7 +90,7 @@ export default function FileSharing() {
   };
 
   const handleUpload = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     setError("");
     setUploadProgress(0);
 
@@ -117,7 +156,7 @@ export default function FileSharing() {
 
       setFiles([]);
       addNotification(
-        `"${data.file_name}" uploaded successfully! Share code: ${data.share_code}`
+        `"${data.file_name}" uploaded successfully! Code: ${data.share_code}`
       );
     } catch (err) {
       console.error("Upload error:", err);
@@ -129,8 +168,40 @@ export default function FileSharing() {
     }
   };
 
+  // Handle code input
+  const handleCodeDigitChange = (index, value) => {
+    const digit = value.replace(/\D/g, "").slice(-1);
+    const newCode = [...codeInput];
+    newCode[index] = digit;
+    setCodeInput(newCode);
+    setError("");
+
+    if (digit && index < 3) {
+      codeInputRefs[index + 1].current?.focus();
+    }
+  };
+
+  const handleCodeKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !codeInput[index] && index > 0) {
+      codeInputRefs[index - 1].current?.focus();
+    }
+    if (e.key === "Enter" && codeInput.every((d) => d)) {
+      fetchFileByCode();
+    }
+  };
+
+  const handleCodePaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+    if (pastedData) {
+      const newCode = pastedData.split("").concat(["", "", "", ""]).slice(0, 4);
+      setCodeInput(newCode);
+    }
+  };
+
   const fetchFileByCode = async () => {
-    if (!codeInput.match(/^\d{4}$/)) {
+    const fullCode = codeInput.join("");
+    if (fullCode.length !== 4) {
       setError("Please enter a valid 4-digit code");
       return;
     }
@@ -141,7 +212,7 @@ export default function FileSharing() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/files/files/${codeInput}`
+        `${import.meta.env.VITE_API_BASE_URL}/api/files/files/${fullCode}`
       );
 
       if (!response.ok) {
@@ -167,117 +238,34 @@ export default function FileSharing() {
     }
   };
 
-  const copyToClipboard = (text) => {
+  const copyToClipboard = (text, id) => {
     navigator.clipboard.writeText(text);
+    setCopied(id);
+    setTimeout(() => setCopied(null), 2000);
     addNotification("Copied to clipboard!");
   };
 
   const deleteLink = (id) => {
     const linkToDelete = shareLinks.find((link) => link.id === id);
     if (linkToDelete) {
-      addNotification(`Removed shared file "${linkToDelete.name}"`);
+      addNotification(`Removed "${linkToDelete.name}"`);
     }
     setShareLinks(shareLinks.filter((link) => link.id !== id));
-  };
-
-  const renderFilePreview = () => {
-    if (!receivedFile) return null;
-
-    const isImage = receivedFile.contentType?.startsWith("image/");
-    const isPDF = receivedFile.contentType === "application/pdf";
-    const isText = receivedFile.contentType?.startsWith("text/");
-
-    return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mt-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Received File
-        </h2>
-
-        <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white flex items-center">
-                <File className="h-5 w-5 mr-2" />
-                {receivedFile.name}
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {receivedFile.size}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                Expires: {receivedFile.expires}
-              </p>
-            </div>
-
-            <div className="flex gap-2">
-              <a
-                href={receivedFile.downloadUrl}
-                download={receivedFile.name}
-                className="flex items-center px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
-              >
-                <Download className="h-4 w-4 mr-1" />
-                Download
-              </a>
-              <button
-                onClick={() => copyToClipboard(receivedFile.downloadUrl)}
-                className="flex items-center px-3 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-lg"
-              >
-                <Copy className="h-4 w-4 mr-1" />
-                Copy
-              </button>
-            </div>
-          </div>
-
-          {isImage && (
-            <div className="mt-4">
-              <img
-                src={receivedFile.downloadUrl}
-                alt={receivedFile.name}
-                className="max-w-full h-auto max-h-96 rounded border border-gray-200 dark:border-gray-700 mx-auto"
-              />
-            </div>
-          )}
-
-          {isPDF && (
-            <div className="mt-4 h-96">
-              <iframe
-                src={receivedFile.downloadUrl}
-                title={receivedFile.name}
-                className="w-full h-full border border-gray-200 dark:border-gray-700 rounded"
-              />
-            </div>
-          )}
-
-          {isText && (
-            <div className="mt-4 h-64">
-              <iframe
-                src={receivedFile.downloadUrl}
-                title={receivedFile.name}
-                className="w-full h-full border border-gray-200 dark:border-gray-700 rounded"
-              />
-            </div>
-          )}
-        </div>
-      </div>
-    );
   };
 
   return (
     <>
       <Helmet>
-        <title>Secure File Sharing | BMS Clipboard</title>
+        <title>File Sharing | CloudClip</title>
         <meta
           name="description"
-          content="Share files up to 100MB with secure, encrypted links that automatically expire. No registration required."
-        />
-        <meta
-          name="keywords"
-          content="file sharing, secure transfer, encrypted upload, temporary file storage"
+          content="Share files up to 100MB with secure, encrypted links."
         />
       </Helmet>
 
-      <div className="max-w-3xl mx-auto px-4 py-8 relative">
+      <div className="max-w-5xl mx-auto relative">
         {/* Notifications */}
-        <div className="fixed top-4 right-4 z-50 w-80 space-y-2">
+        <div className="fixed top-20 right-4 z-50 w-80 space-y-2">
           <AnimatePresence>
             {notifications.map((notification) => (
               <motion.div
@@ -285,232 +273,314 @@ export default function FileSharing() {
                 initial={{ opacity: 0, x: 100 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 100 }}
-                className={`p-4 rounded-lg shadow-lg flex items-start ${
-                  notification.type === "error"
-                    ? "bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400"
-                    : "bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-600 dark:text-green-400"
-                }`}
+                className={`p-4 rounded-xl shadow-lg flex items-start gap-3 ${notification.type === "error"
+                  ? "bg-red-500 text-white"
+                  : "bg-green-500 text-white"
+                  }`}
               >
                 {notification.type === "error" ? (
-                  <XCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                  <XCircle className="h-5 w-5 flex-shrink-0" />
                 ) : (
-                  <CheckCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="h-5 w-5 flex-shrink-0" />
                 )}
-                <span className="flex-1">{notification.message}</span>
+                <span className="flex-1 text-sm">{notification.message}</span>
                 <button
                   onClick={() =>
                     setNotifications(
                       notifications.filter((n) => n.id !== notification.id)
                     )
                   }
-                  className="ml-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                  className="hover:opacity-80"
                 >
-                  <XCircle className="h-5 w-5" />
+                  <XCircle className="h-4 w-4" />
                 </button>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
 
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-          File Sharing
-        </h1>
-
-        {/* Educational Content Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            Secure File Sharing Features
-          </h2>
-          <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300 text-sm">
-            <li>100MB maximum file size (all file types supported)</li>
-            <li>Files automatically delete after 7 days</li>
-            <li>4-digit access codes for easy sharing</li>
-            <li>Preview images, PDFs, and text files directly</li>
-            <li>End-to-end encrypted transfers</li>
-          </ul>
-        </div>
-
-        {/* First Ad Unit */}
-        <div className="c">
-          <h1 className="text-center py-[20px] text-lg font-semibold">
-            Sponsors
+        {/* Header */}
+        <div className="mb-8 animate-slide-in">
+          <h1 className="text-3xl md:text-4xl font-display font-bold text-gray-900 dark:text-white mb-2">
+            File Sharing
           </h1>
-          <AdSenseAd slotId="1101018584" />
+          <p className="text-gray-600 dark:text-gray-400">
+            Upload and share files up to 100MB securely
+          </p>
         </div>
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 flex items-center">
-            <XCircle className="h-5 w-5 mr-2" />
-            {error}
-          </div>
-        )}
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Upload Section */}
+          <div className="space-y-6 animate-slide-in">
+            <div className="glass rounded-2xl p-6">
+              <h2 className="font-display font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <Cloud className="h-5 w-5 text-indigo-500" />
+                Upload File
+              </h2>
 
-        {/* Upload Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Upload Files
-          </h2>
-          <form onSubmit={handleUpload}>
-            <div className="mb-4">
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current.click()}
-                  className="flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
-                >
-                  <Upload className="h-5 w-5 mr-2" />
-                  Choose File
-                </button>
+              {/* Drag and Drop Zone */}
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className={`drop-zone cursor-pointer ${isDragOver ? "drag-over" : ""}`}
+              >
                 <input
                   type="file"
                   ref={fileInputRef}
                   onChange={handleFileChange}
                   className="hidden"
                 />
-                <button
-                  type="submit"
-                  disabled={files.length === 0 || isUploading}
-                  className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:bg-gray-400"
-                >
-                  {isUploading ? "Uploading..." : "Upload File"}
-                </button>
+                <div className="flex flex-col items-center gap-4">
+                  <div className={`p-4 rounded-2xl transition-all duration-300 ${isDragOver
+                    ? "bg-indigo-100 dark:bg-indigo-900/50"
+                    : "bg-gray-100 dark:bg-gray-800"
+                    }`}>
+                    <Upload className={`h-8 w-8 ${isDragOver ? "text-indigo-500" : "text-gray-400"
+                      }`} />
+                  </div>
+                  <div className="text-center">
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {isDragOver ? "Drop your file here" : "Drag & drop or click to upload"}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      Maximum file size: 100MB
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              {isUploading && (
-                <div className="mt-4">
-                  <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-1">
-                    <span>Uploading: {files[0]?.name}</span>
-                    <span>{uploadProgress}%</span>
+              {/* Selected File */}
+              {files.length > 0 && !isUploading && (
+                <div className="mt-4 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl flex items-center gap-3 animate-slide-in">
+                  <File className="h-8 w-8 text-indigo-500" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-900 dark:text-white truncate">
+                      {files[0].name}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {(files[0].size / (1024 * 1024)).toFixed(2)} MB
+                    </p>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFiles([]);
+                    }}
+                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                  >
+                    <XCircle className="h-5 w-5" />
+                  </button>
+                </div>
+              )}
+
+              {/* Upload Progress */}
+              {isUploading && (
+                <div className="mt-4 animate-slide-in">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-600 dark:text-gray-400">
+                      Uploading: {files[0]?.name}
+                    </span>
+                    <span className="font-medium text-indigo-600 dark:text-indigo-400">
+                      {uploadProgress}%
+                    </span>
+                  </div>
+                  <div className="progress-bar">
                     <div
-                      className="bg-indigo-600 h-2.5 rounded-full"
+                      className="progress-bar-fill"
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
                 </div>
               )}
 
-              {files.length > 0 && !isUploading && (
-                <div className="mt-3">
-                  <p className="text-sm text-gray-700 dark:text-gray-300 flex items-center">
-                    <File className="h-4 w-4 mr-2" />
-                    {files[0].name} (
-                    {(files[0].size / (1024 * 1024)).toFixed(2)} MB)
-                  </p>
+              {/* Upload Button */}
+              <button
+                onClick={handleUpload}
+                disabled={files.length === 0 || isUploading}
+                className="w-full mt-4 py-3 px-4 bg-gradient-to-r from-indigo-500 to-purple-500 
+                  text-white rounded-xl font-semibold shadow-lg shadow-indigo-500/30
+                  hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-0.5
+                  disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0
+                  transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                {isUploading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Uploading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="h-5 w-5" />
+                    <span>Upload File</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Access Section */}
+          <div className="space-y-6 animate-slide-in-right">
+            <div className="glass rounded-2xl p-6">
+              <h2 className="font-display font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <Search className="h-5 w-5 text-indigo-500" />
+                Access Shared File
+              </h2>
+
+              {/* Code Input */}
+              <div className="flex justify-center gap-3 mb-4">
+                {codeInput.map((digit, index) => (
+                  <input
+                    key={index}
+                    ref={codeInputRefs[index]}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleCodeDigitChange(index, e.target.value)}
+                    onKeyDown={(e) => handleCodeKeyDown(index, e)}
+                    onPaste={handleCodePaste}
+                    className="code-input"
+                  />
+                ))}
+              </div>
+
+              {error && (
+                <div className="flex items-center justify-center gap-2 text-red-500 text-sm mb-4">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>{error}</span>
                 </div>
               )}
+
+              <button
+                onClick={fetchFileByCode}
+                disabled={isFetching || codeInput.some((d) => !d)}
+                className="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 
+                  text-gray-900 dark:text-white rounded-xl font-semibold
+                  hover:bg-gray-200 dark:hover:bg-gray-700
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                {isFetching ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-gray-400 border-t-gray-700 rounded-full animate-spin" />
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Eye className="h-5 w-5" />
+                    <span>View File</span>
+                  </>
+                )}
+              </button>
             </div>
-          </form>
-        </div>
 
-        {/* Access Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Access Shared File
-          </h2>
-          <div className="flex items-center gap-3">
-            <input
-              type="text"
-              value={codeInput}
-              onChange={(e) => {
-                const val = e.target.value.replace(/\D/g, "").slice(0, 4);
-                setCodeInput(val);
-                setError("");
-              }}
-              placeholder="Enter 4-digit code"
-              maxLength="4"
-              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
-            />
-            <button
-              onClick={fetchFileByCode}
-              disabled={isFetching || codeInput.length !== 4}
-              className="flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg disabled:bg-gray-400"
-            >
-              <Eye className="h-5 w-5 mr-2" />
-              {isFetching ? "Loading..." : "View"}
-            </button>
+            {/* Received File Preview */}
+            {receivedFile && (
+              <div className="glass rounded-2xl p-6 animate-bounce-in">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl">
+                    {React.createElement(getFileIcon(receivedFile.contentType), {
+                      className: "h-8 w-8 text-indigo-600 dark:text-indigo-400"
+                    })}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+                      {receivedFile.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {receivedFile.size} • Expires: {receivedFile.expires}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Preview for images */}
+                {receivedFile.contentType?.startsWith("image/") && (
+                  <div className="mt-4">
+                    <img
+                      src={receivedFile.downloadUrl}
+                      alt={receivedFile.name}
+                      className="w-full h-48 object-cover rounded-xl"
+                    />
+                  </div>
+                )}
+
+                <div className="flex gap-3 mt-4">
+                  <a
+                    href={receivedFile.downloadUrl}
+                    download={receivedFile.name}
+                    className="flex-1 py-3 px-4 bg-indigo-500 text-white rounded-xl font-medium
+                      hover:bg-indigo-600 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download
+                  </a>
+                  <button
+                    onClick={() => copyToClipboard(receivedFile.downloadUrl, "received")}
+                    className={`px-4 rounded-xl transition-colors flex items-center justify-center ${copied === "received"
+                      ? "bg-green-100 dark:bg-green-900/30 text-green-600"
+                      : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      }`}
+                  >
+                    {copied === "received" ? <CheckCircle className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Second Ad Unit */}
-        {(shareLinks.length > 0 || receivedFile) && (
-          <div className="c">
-            <h1 className="text-center py-[20px] text-lg font-semibold">
-              Sponsors
-            </h1>
-            <AdSenseAd slotId="7843256991" />
-          </div>
-        )}
-
-        {/* Received File Section */}
-        {renderFilePreview()}
 
         {/* Shared Files List */}
         {shareLinks.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="mt-8 glass rounded-2xl p-6 animate-slide-in">
+            <h2 className="font-display font-semibold text-gray-900 dark:text-white mb-4">
               Your Shared Files
             </h2>
-            <div className="space-y-4">
-              {shareLinks.map((link) => (
-                <div
-                  key={link.id}
-                  className="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white flex items-center">
-                        <File className="h-5 w-5 mr-2" />
+            <div className="space-y-3">
+              {shareLinks.map((link) => {
+                const FileIcon = getFileIcon(link.contentType);
+                return (
+                  <div
+                    key={link.id}
+                    className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl flex items-center gap-4"
+                  >
+                    <div className="p-2 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg">
+                      <FileIcon className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 dark:text-white truncate">
                         {link.name}
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {link.size} • Code: {link.code}
+                        {link.size} • Code: <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">{link.code}</span>
                       </p>
                     </div>
-                    <button
-                      onClick={() => deleteLink(link.id)}
-                      className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
-                    >
-                      <Trash2 className="h-5 w-5" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => copyToClipboard(link.code, link.id)}
+                        className={`p-2 rounded-lg transition-colors ${copied === link.id
+                          ? "bg-green-100 dark:bg-green-900/30 text-green-600"
+                          : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
+                          }`}
+                      >
+                        {copied === link.id ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                      </button>
+                      <button
+                        onClick={() => deleteLink(link.id)}
+                        className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 
+                          hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-500 transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 mt-2">
-                    <input
-                      type="text"
-                      value={link.link}
-                      readOnly
-                      className="flex-1 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white"
-                    />
-                    <button
-                      onClick={() => copyToClipboard(link.link)}
-                      className="p-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
-                    >
-                      <Copy className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
-
-        {/* Additional Tips Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mt-8">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
-            File Sharing Tips
-          </h3>
-          <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300 text-sm">
-            <li>For large files, compress them first for faster uploads</li>
-            <li>
-              Use descriptive filenames to help recipients identify content
-            </li>
-            <li>
-              Share the code through a different channel than the password for
-              security
-            </li>
-          </ul>
-        </div>
       </div>
     </>
   );

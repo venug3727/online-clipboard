@@ -5,8 +5,6 @@ import {
   Sun,
   Moon,
   Settings,
-  History,
-  Bookmark,
   Send,
   Download,
   Link as LinkIcon,
@@ -14,6 +12,9 @@ import {
   QrCode,
   Menu,
   X,
+  Home,
+  Sparkles,
+  ChevronRight,
 } from "lucide-react";
 import { Helmet } from "@dr.pogodin/react-helmet";
 import { useTheme } from "../context/ThemeContext";
@@ -42,7 +43,7 @@ export default function Layout({ children }) {
   // Page load effect
   useEffect(() => {
     setIsLoading(true);
-    const timer = setTimeout(() => setIsLoading(false), 800);
+    const timer = setTimeout(() => setIsLoading(false), 600);
     return () => clearTimeout(timer);
   }, [location.pathname]);
 
@@ -72,176 +73,263 @@ export default function Layout({ children }) {
     }
   };
 
-  return (
-    <div
-      className={`min-h-screen ${darkMode ? "dark bg-gray-900" : "bg-gray-50"}`}
+  const navItems = {
+    main: [
+      { to: "/", icon: Home, label: "Home" },
+    ],
+    clipboard: [
+      { to: "/send", icon: Send, label: "Send Clipboard" },
+      { to: "/receive", icon: Download, label: "Receive Clipboard" },
+    ],
+    tools: [
+      { to: "/file-sharing", icon: FileText, label: "File Sharing" },
+      { to: "/custom-url", icon: LinkIcon, label: "Custom URLs" },
+      { to: "/qr-generator", icon: QrCode, label: "QR Generator" },
+    ],
+  };
+
+  const NavLink = ({ to, icon: Icon, label }) => (
+    <Link
+      to={to}
+      onClick={closeMobileMenu}
+      className={`group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
+        ${isActive(to)
+          ? "bg-gradient-to-r from-indigo-500/10 to-purple-500/10 text-indigo-600 dark:text-indigo-400 nav-active"
+          : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-white"
+        }`}
     >
-      <Helmet>
-        <title>Secure File Sharing | BMS Clipboard</title>
-        <meta
-          name="description"
-          content="Share files up to 100MB with secure, encrypted links that automatically expire. No registration required."
-        />
-        <meta
-          name="keywords"
-          content="file sharing, secure transfer, encrypted upload, temporary file storage"
-        />
-      </Helmet>
+      <div className={`p-2 rounded-lg transition-all duration-300 ${isActive(to)
+        ? "bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/30"
+        : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 group-hover:bg-gray-200 dark:group-hover:bg-gray-700"
+        }`}>
+        <Icon className="h-4 w-4" />
+      </div>
+      <span className="font-medium">{label}</span>
+      {isActive(to) && (
+        <ChevronRight className="h-4 w-4 ml-auto text-indigo-400" />
+      )}
+    </Link>
+  );
 
-      {/* Mobile Header */}
-      <header className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg flex justify-between items-center p-4">
-        <Link to="/" className="flex items-center" onClick={closeMobileMenu}>
-          <Clipboard className="h-7 w-7 text-indigo-600 dark:text-indigo-400" />
-          <span className="ml-2 text-lg font-bold text-gray-900 dark:text-white">
-            BMS Clipboard
-          </span>
-        </Link>
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 rounded-lg bg-white dark:bg-gray-800 shadow"
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
-      </header>
+  const NavSection = ({ title, items }) => (
+    <div className="mb-6">
+      <h3 className="px-4 mb-2 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+        {title}
+      </h3>
+      <div className="space-y-1">
+        {items.map((item) => (
+          <NavLink key={item.to} {...item} />
+        ))}
+      </div>
+    </div>
+  );
 
-      {/* Sidebar/Navigation */}
-      <aside
-        className={`w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-4 fixed h-full z-40 transition-all duration-300 ${
-          mobileMenuOpen ? "left-0" : "-left-64"
-        } md:left-0 md:relative`}
-      >
-        <div className="mb-6 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="relative">
-              <div className="absolute inset-0 bg-indigo-400 rounded-lg blur" />
-              <Clipboard className="h-8 w-8 text-indigo-600 dark:text-indigo-400 relative z-10" />
-            </div>
-            <Link to="/" onClick={closeMobileMenu}>
-              <span className="text-xl font-bold">BMS Clipboard</span>
+  return (
+    <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 gradient-mesh">
+        <Helmet>
+          <title>Secure File Sharing | CloudClip</title>
+          <meta
+            name="description"
+            content="Share files up to 100MB with secure, encrypted links that automatically expire. No registration required."
+          />
+          <meta
+            name="keywords"
+            content="file sharing, secure transfer, encrypted upload, temporary file storage"
+          />
+        </Helmet>
+
+        {/* Mobile Header */}
+        <header className="md:hidden fixed top-0 left-0 right-0 z-50 glass-strong shadow-lg">
+          <div className="flex justify-between items-center p-4">
+            <Link to="/" className="flex items-center gap-3" onClick={closeMobileMenu}>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl blur opacity-50" />
+                <div className="relative p-2 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl">
+                  <Clipboard className="h-5 w-5 text-white" />
+                </div>
+              </div>
+              <span className="text-lg font-display font-bold text-gray-900 dark:text-white">
+                CloudClip
+              </span>
             </Link>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              ) : (
+                <Menu className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              )}
+            </button>
           </div>
-        </div>
+        </header>
 
-        <nav className="space-y-1">
-          <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">
-            Clipboard
-          </h3>
-
-          {[
-            { to: "/send", icon: Send, label: "Send Clipboard" },
-            { to: "/receive", icon: Download, label: "Receive Clipboard" },
-          ].map(({ to, icon: Icon, label }) => (
-            <Link
-              key={to}
-              to={to}
-              className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
-                isActive(to)
-                  ? "bg-gray-100 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              }`}
-              onClick={closeMobileMenu}
-            >
-              <Icon className="h-5 w-5 mr-3" />
-              {label}
-            </Link>
-          ))}
-
-          <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-4 mb-1">
-            Content
-          </h3>
-
-          {[
-            { to: "/custom-url", icon: LinkIcon, label: "Custom URLs" },
-            { to: "/file-sharing", icon: FileText, label: "File Sharing" },
-            { to: "/qr-generator", icon: QrCode, label: "QR Generator" },
-          ].map(({ to, icon: Icon, label }) => (
-            <Link
-              key={to}
-              to={to}
-              className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
-                isActive(to)
-                  ? "bg-gray-100 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              }`}
-              onClick={closeMobileMenu}
-            >
-              <Icon className="h-5 w-5 mr-3" />
-              {label}
-            </Link>
-          ))}
-
-          <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-4 mb-1">
-            Settings
-          </h3>
-
-          <Link
-            to="/settings"
-            className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
-              isActive("/settings")
-                ? "bg-gray-100 dark:bg-gray-700 text-indigo-600 dark:text-indigo-400"
-                : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-            }`}
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <div
+            className="md:hidden fixed inset-0 bg-black/50 z-30 animate-fade-in"
             onClick={closeMobileMenu}
-          >
-            <Settings className="h-5 w-5 mr-3" />
-            Settings
-          </Link>
+          />
+        )}
 
-          <button
-            onClick={toggleDarkMode}
-            className="w-full flex items-center px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors mt-4"
-          >
-            {darkMode ? (
-              <Sun className="h-5 w-5 mr-3 text-yellow-400" />
-            ) : (
-              <Moon className="h-5 w-5 mr-3 text-indigo-600" />
-            )}
-            <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
-          </button>
-        </nav>
-      </aside>
-
-      {/* Main Content Area */}
-      <div className="md:ml-64 md:mt-[-500px] min-h-screen pt-16 md:pt-0">
-        {/* Loading Indicator */}
-        <div
-          className={`h-0.5 bg-indigo-500 dark:bg-indigo-400 transition-all duration-300 fixed top-0 left-0 right-0 z-50 ${
-            isLoading ? "w-full" : "w-0"
-          }`}
+        {/* Sidebar */}
+        <aside
+          className={`fixed top-0 left-0 h-full w-72 z-40 glass-strong border-r border-gray-200/50 dark:border-gray-800/50
+            transform transition-transform duration-300 ease-out
+            ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"} 
+            md:translate-x-0`}
         >
-          <div className="h-full w-1/4 bg-indigo-300 dark:bg-indigo-500 animate-loading"></div>
-        </div>
+          <div className="flex flex-col h-full">
+            {/* Logo */}
+            <div className="p-6 border-b border-gray-200/50 dark:border-gray-800/50">
+              <Link to="/" className="flex items-center gap-3" onClick={closeMobileMenu}>
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl blur opacity-50 animate-pulse-slow" />
+                  <div className="relative p-2.5 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl shadow-lg shadow-indigo-500/30">
+                    <Clipboard className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+                <div>
+                  <h1 className="text-xl font-display font-bold text-gray-900 dark:text-white">
+                    CloudClip
+                  </h1>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                    <Sparkles className="h-3 w-3" />
+                    Secure & Fast
+                  </p>
+                </div>
+              </Link>
+            </div>
 
-        {/* Page Content */}
-        <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+            {/* Navigation */}
+            <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+              <NavSection title="Overview" items={navItems.main} />
+              <NavSection title="Clipboard" items={navItems.clipboard} />
+              <NavSection title="Tools" items={navItems.tools} />
+            </nav>
+
+            {/* Footer Actions */}
+            <div className="p-4 border-t border-gray-200/50 dark:border-gray-800/50 space-y-2">
+              <Link
+                to="/settings"
+                onClick={closeMobileMenu}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
+                  ${isActive("/settings")
+                    ? "bg-gradient-to-r from-indigo-500/10 to-purple-500/10 text-indigo-600 dark:text-indigo-400"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/50"
+                  }`}
+              >
+                <div className={`p-2 rounded-lg ${isActive("/settings")
+                  ? "bg-gradient-to-br from-indigo-500 to-purple-500 text-white"
+                  : "bg-gray-100 dark:bg-gray-800"
+                  }`}>
+                  <Settings className="h-4 w-4" />
+                </div>
+                <span className="font-medium">Settings</span>
+              </Link>
+
+              <button
+                onClick={toggleDarkMode}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 
+                  hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all duration-300"
+              >
+                <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800">
+                  {darkMode ? (
+                    <Sun className="h-4 w-4 text-amber-500" />
+                  ) : (
+                    <Moon className="h-4 w-4 text-indigo-500" />
+                  )}
+                </div>
+                <span className="font-medium">{darkMode ? "Light Mode" : "Dark Mode"}</span>
+                <div className={`ml-auto w-10 h-6 rounded-full p-1 transition-colors duration-300 ${darkMode ? "bg-indigo-500" : "bg-gray-300"
+                  }`}>
+                  <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-300 ${darkMode ? "translate-x-4" : "translate-x-0"
+                    }`} />
+                </div>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Content Area */}
+        <div className="md:ml-72 min-h-screen pt-16 md:pt-0">
+          {/* Loading Bar */}
+          <div className={`fixed top-0 left-0 right-0 z-50 h-1 bg-gray-200 dark:bg-gray-800 
+            ${isLoading ? "opacity-100" : "opacity-0"} transition-opacity duration-300`}>
+            <div className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-shimmer" />
+          </div>
+
+          {/* Page Content */}
+          <main className="p-4 sm:p-6 lg:p-8 min-h-screen pb-24 md:pb-8">
+            <div className="animate-fade-in">
+              {children}
+            </div>
+
+            {/* Footer - Desktop */}
+            <footer className="hidden md:block mt-16 pt-8 border-t border-gray-200/50 dark:border-gray-800/50">
+              <div className="max-w-4xl mx-auto">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                  <div className="text-sm text-gray-500 dark:text-gray-500">
+                    © {new Date().getFullYear()} CloudClip. All rights reserved.
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <Link
+                      to="/privacy"
+                      className="text-sm text-gray-500 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                    >
+                      Privacy Policy
+                    </Link>
+                    <Link
+                      to="/terms"
+                      className="text-sm text-gray-500 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                    >
+                      Terms of Service
+                    </Link>
+                    <Link
+                      to="/about"
+                      className="text-sm text-gray-500 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                    >
+                      About
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </footer>
+          </main>
+        </div>
 
         {/* Mobile Bottom Navigation */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex justify-around p-2">
-          {[
-            { to: "/send", icon: Send, label: "Send" },
-            { to: "/receive", icon: Download, label: "Receive" },
-            { to: "/file-sharing", icon: FileText, label: "Files" },
-          ].map(({ to, icon: Icon, label }) => (
-            <Link
-              key={to}
-              to={to}
-              className={`flex flex-col items-center p-2 rounded-lg transition-colors ${
-                isActive(to)
-                  ? "text-indigo-600 dark:text-indigo-400"
-                  : "text-gray-700 dark:text-gray-300"
-              }`}
-              onClick={closeMobileMenu}
-            >
-              <Icon className="h-5 w-5" />
-              <span className="text-xs mt-1">{label}</span>
-            </Link>
-          ))}
-        </div>
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 glass-strong border-t border-gray-200/50 dark:border-gray-800/50 safe-area-bottom">
+          <div className="flex justify-around items-center p-2">
+            {[
+              { to: "/", icon: Home, label: "Home" },
+              { to: "/send", icon: Send, label: "Send" },
+              { to: "/receive", icon: Download, label: "Receive" },
+              { to: "/file-sharing", icon: FileText, label: "Files" },
+            ].map(({ to, icon: Icon, label }) => (
+              <Link
+                key={to}
+                to={to}
+                className={`flex flex-col items-center gap-1 p-2 rounded-xl min-w-[60px] transition-all duration-200
+                  ${isActive(to)
+                    ? "text-indigo-600 dark:text-indigo-400"
+                    : "text-gray-500 dark:text-gray-400"
+                  }`}
+              >
+                <div className={`p-2 rounded-xl transition-all duration-200 ${isActive(to)
+                  ? "bg-indigo-100 dark:bg-indigo-900/50"
+                  : ""
+                  }`}>
+                  <Icon className="h-5 w-5" />
+                </div>
+                <span className="text-[10px] font-medium">{label}</span>
+              </Link>
+            ))}
+          </div>
+        </nav>
       </div>
     </div>
   );

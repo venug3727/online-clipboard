@@ -14,6 +14,11 @@ import FileSharing from "./pages/FileSharing";
 import QRGenerator from "./pages/QRGenerator.jsx";
 import NotFound from "./pages/NotFound";
 
+// Legal Pages
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import About from "./pages/About";
+
 function App() {
   return (
     <ThemeProvider>
@@ -44,7 +49,7 @@ function App() {
             }
           />
 
-          
+
           <Route
             path="/settings"
             element={
@@ -74,6 +79,30 @@ function App() {
             element={
               <Layout>
                 <QRGenerator />
+              </Layout>
+            }
+          />
+          <Route
+            path="/privacy"
+            element={
+              <Layout>
+                <PrivacyPolicy />
+              </Layout>
+            }
+          />
+          <Route
+            path="/terms"
+            element={
+              <Layout>
+                <TermsOfService />
+              </Layout>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <Layout>
+                <About />
               </Layout>
             }
           />

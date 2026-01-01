@@ -17,16 +17,17 @@ import React, { useEffect, useRef } from "react";
  */
 
 // ============================================
-// CONFIGURATION - Replace with your actual IDs
+// CONFIGURATION - Your PropellerAds Settings
 // ============================================
 const AD_CONFIG = {
-    // PropellerAds Zone IDs (get these from your PropellerAds dashboard)
+    // PropellerAds Zone IDs (from your PropellerAds dashboard)
     propellerAds: {
-        enabled: false, // Set to true after approval
-        zoneId: "YOUR_ZONE_ID_HERE", // Replace with your zone ID
+        enabled: true, // Enabled after approval!
+        zoneId: 10404512,
+        domain: "3nbf4.com",
     },
 
-    // Google AdSense (if you want to use it later)
+    // Google AdSense (backup if you want to use it later)
     googleAdsense: {
         enabled: false,
         clientId: "ca-pub-9460974170228372", // Your existing AdSense client ID

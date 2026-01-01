@@ -7,13 +7,26 @@
   <title>CloudClip</title>
 
   <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
-    crossorigin="anonymous"></script>
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460974170228372"
+    crossorigin="anonymous"></script> -->
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
+
+  <!-- PropellerAds Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').then(function (registration) {
+          console.log('PropellerAds SW registered: ', registration.scope);
+        }).catch(function (error) {
+          console.log('PropellerAds SW registration failed: ', error);
+        });
+      });
+    }
+  </script>
 </body>
 
 </html>

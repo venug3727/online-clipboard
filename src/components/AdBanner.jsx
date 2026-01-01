@@ -23,14 +23,15 @@ const AD_CONFIG = {
     // PropellerAds Zone IDs (from your PropellerAds dashboard)
     propellerAds: {
         enabled: true, // Enabled after approval!
-        zoneId: 10404512,
+        multiTagZoneId: 198032, // MultiTag zone
+        serviceWorkerZoneId: 10404534, // Service Worker zone
         domain: "3nbf4.com",
     },
 
     // Google AdSense (backup if you want to use it later)
     googleAdsense: {
         enabled: false,
-        clientId: "ca-pub-9460974170228372", // Your existing AdSense client ID
+        clientId: "ca-pub-9460974170228372",
         slotId: "YOUR_SLOT_ID_HERE",
     },
 };
